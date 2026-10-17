@@ -29,7 +29,7 @@ jobs:
       - name: Generate and write Day 01 challenge
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           FORCE_REGENERATE: ${{ inputs.force_regenerate }}
         run: python .github/scripts/generate_day01.py
