@@ -227,3 +227,50 @@
   .welcome .progress-foot{font-size:6.5px}
 }
 
+/* V2.2 — tablet / iPad layout (mobile rules at <=767px remain untouched) */
+@media(min-width:768px) and (max-width:1199px){
+  .rail{
+    width:270px;
+    transform:translateX(calc(-100% - 8px));
+    transition:transform .25s;
+    box-shadow:12px 0 30px #20342912;
+  }
+  .rail.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mobile-menu{
+    display:grid;
+    place-items:center;
+    min-width:44px;
+    min-height:44px;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:#38453d;
+    font-size:17px;
+    cursor:pointer;
+  }
+  .mobile-menu:hover{background:#edf2ee}
+  .mobile-menu:focus-visible{outline:3px solid #89c59b;outline-offset:2px}
+  .content{padding-left:clamp(28px,4vw,48px);padding-right:clamp(28px,4vw,48px)}
+  .learning-sequence{
+    grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr) 30px minmax(0,1fr);
+    gap:5px;
+  }
+  .learning-sequence .concept-feature{grid-column:auto;min-height:207px}
+  .learning-sequence .sequence-card{min-width:0;min-height:207px}
+  .learning-sequence .sequence-card h3{overflow-wrap:normal;word-break:normal;hyphens:manual}
+}
+
+/* Review helper text: keep the English placeholder primary and Chinese visually secondary. */
+.reflection-content textarea::placeholder{
+  color:#9aa49d;
+  opacity:1;
+  font:400 10px/1.5 "DM Sans","PingFang SC","Microsoft YaHei",sans-serif;
+}
+.reflection small.reflection-placeholder-zh{
+  display:block;
+  margin-top:3px;
+  color:#8983a8;
+  font:400 9px/1.5 "DM Sans","PingFang SC","Microsoft YaHei",sans-serif;
+}
+
