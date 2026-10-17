@@ -34,6 +34,7 @@ jobs:
             echo "GEMINI_API_KEY is available"
           else
             echo "GEMINI_API_KEY is EMPTY"
+            exit 1
           fi
 
       - name: Generate and write Day 01 challenge
