@@ -12,12 +12,12 @@
     ["07", "Weekly Review", "每周复盘", "Locked"]
   ];
   const icons = {
-    arrowUpRight: '<svg class="ui-icon day-arrow-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5 13 13 5M6 5h7v7"/></svg>',
+    arrowUpRight: '<svg width="16" height="16" class="ui-icon day-arrow-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5 13 13 5M6 5h7v7"/></svg>',
     dayDot: '<span class="day-status-dot" aria-hidden="true"></span>',
-    dayCheck: '<svg class="ui-icon day-check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>',
-    dayLock: '<svg class="ui-icon day-lock-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5.5 8V6a3.5 3.5 0 0 1 7 0v2M4.5 8h9v7h-9z"/></svg>',
-    circle: '<svg class="ui-icon status-circle-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/></svg>',
-    check: '<svg class="ui-icon check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>'
+    dayCheck: '<svg width="16" height="16" class="ui-icon day-check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>',
+    dayLock: '<svg width="16" height="16" class="ui-icon day-lock-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5.5 8V6a3.5 3.5 0 0 1 7 0v2M4.5 8h9v7h-9z"/></svg>',
+    circle: '<svg width="16" height="16" class="ui-icon status-circle-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/></svg>',
+    check: '<svg width="16" height="16" class="ui-icon check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>'
   };
   const nav = document.getElementById("weekNav");
   nav.innerHTML = days.map((day, index) => `<a class="day-link ${index === 0 ? "active" : ""}" href="${index === 0 ? "#top" : "#"}" data-day-index="${index}" ${index === 0 ? 'aria-current="page"' : 'aria-haspopup="dialog"'}><span class="day-num">${day[0]}</span><span class="day-title">${day[1]}<small>${day[2]}</small></span><span class="day-status" title="${day[3]}">${index === 0 ? icons.dayDot : index === 6 ? icons.dayLock : icons.arrowUpRight}</span></a>`).join("");
@@ -199,7 +199,7 @@
   document.getElementById("dialogOk").addEventListener("click", () => upcomingDialog.close());
   nav.querySelectorAll("[data-day-index]").forEach((link) => link.addEventListener("click", (event) => {
     const index = Number(link.dataset.dayIndex);
-    if (index === 0) { rail.classList.remove("open"); return; }
+    if (index === 0) { closeNavigation(); return; }
     event.preventDefault();
     const day = days[index];
     document.getElementById("dialogDay").textContent = `DAY ${day[0]}`;
@@ -212,9 +212,16 @@
 
   const rail = document.querySelector(".rail");
   const menuToggle = document.getElementById("menuToggle");
-  menuToggle.addEventListener("click", () => rail.classList.toggle("open"));
+  const closeNavigation = () => {
+    rail.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+  menuToggle.addEventListener("click", () => {
+    const isOpen = rail.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
   document.addEventListener("click", (event) => {
-    if (rail.classList.contains("open") && !rail.contains(event.target) && event.target !== menuToggle) rail.classList.remove("open");
+    if (rail.classList.contains("open") && !rail.contains(event.target) && !menuToggle.contains(event.target)) closeNavigation();
   });
   const sectionLinks = [...document.querySelectorAll(".section-nav a")];
   if ("IntersectionObserver" in window) {
@@ -223,7 +230,7 @@
     }), { rootMargin: "-25% 0px -65% 0px" });
     document.querySelectorAll(".lesson-section").forEach((section) => observer.observe(section));
   }
-  document.querySelectorAll("a[href^='#']").forEach((link) => link.addEventListener("click", () => rail.classList.remove("open")));
+  document.querySelectorAll("a[href^='#']").forEach((link) => link.addEventListener("click", closeNavigation));
 
   fetch(sourceUrl).then((response) => {
     if (!response.ok) throw new Error("Day 01 source unavailable");
