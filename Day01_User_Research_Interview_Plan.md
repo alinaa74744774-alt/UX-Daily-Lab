@@ -23,12 +23,15 @@ Understand how university students currently acquire and pass on used textbooks:
 ### Fictional discussion prompt｜虚构讨论情境
 
 **“Lin” is a fictional fourth-year undergraduate preparing to move out of campus housing.** After several semesters, Lin is deciding which textbooks to keep, sell, give away, or recycle.
+**中文理解：**“Lin”是一位准备搬离校园宿舍的虚构大四学生。经历了几个学期后，Lin 正在考虑哪些教材要留下、出售、赠送或回收。这个人物用于界定讨论情境，并不代表真实受访者。
 
 - **Context:** Sorting used books before moving out.
+  **中文理解：**搬离宿舍前整理和处置二手教材。
 - **Behaviors to explore:** How Lin judges whether a book is reusable, where Lin looks for books or buyers, how Lin communicates condition and price, and how Lin arranges handoff.
+  **中文理解：**了解 Lin 如何判断教材是否适合再次使用、会去哪里寻找教材或买家、如何说明书况与价格，以及怎样安排交接。
 - **Recruitment note:** Lin is a prompt for discussion, not a real participant or a claim about all fourth-year students. Recruit students with recent experience buying, selling, exchanging, or trying to pass on a textbook; they do not need to match this scenario.
+  **中文理解：**Lin 只是帮助聚焦讨论的虚构情境，不是真实受访者，也不能代表所有大四学生。招募近期买过、卖过、交换过教材，或尝试转让教材的学生；不要求他们与 Lin 的背景相同。
 
-**中文理解：**Lin 是帮助思考研究范围的虚构情境，并不代表所有大四学生。招募近期有二手教材买卖、交换或转让经历的学生，不要求他们符合 Lin 的背景。
 
 ## Research Method｜研究方法
 

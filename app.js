@@ -2,7 +2,6 @@
   "use strict";
   const sourcePath = "Day01_User_Research_Interview_Plan.md";
   const sourceUrl = `./${encodeURIComponent(sourcePath)}`;
-  const sourceOnGitHub = "https://github.com/alinaa74744774-alt/UX-Daily-Lab/blob/main/Day01_User_Research_Interview_Plan.md";
   const days = [
     ["01", "User Research", "用户研究", "Active"],
     ["02", "User Persona", "用户画像", "Upcoming"],
@@ -14,7 +13,7 @@
   ];
   const nav = document.getElementById("weekNav");
   nav.innerHTML = days.map((day, index) => `<a class="day-link ${index === 0 ? "active" : ""}" href="${index === 0 ? "#top" : "#"}" data-day-index="${index}" ${index === 0 ? 'aria-current="page"' : 'aria-haspopup="dialog"'}><span class="day-num">${day[0]}</span><span class="day-title">${day[1]}<small>${day[2]}</small></span><span class="day-status" title="${day[3]}">${index === 0 ? "●" : index === 6 ? "◌" : "↗"}</span></a>`).join("");
-  nav.insertAdjacentHTML("beforeend", '<div class="week-note">WEEK 01 <span>1 active · 6 upcoming</span></div>');
+  nav.insertAdjacentHTML("beforeend", '<div class="week-note">WEEK 01 <span id="weekNavSummary">0 completed · 1 active · 6 upcoming</span></div>');
 
   const escapeHtml = (value) => value.replace(/[&<>\"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
   const inline = (value) => escapeHtml(value)
@@ -112,14 +111,30 @@
     }).join("");
   }
 
-  const learningButton = document.getElementById("learningDone");
-  const practiceButton = document.getElementById("practiceDone");
-  const practiceDetails = document.getElementById("practiceDetails");
   const toast = document.getElementById("toast");
-  let status = { learning: false, practice: false };
+  const MODULES = ["learn", "english", "challenge", "practice", "review"];
+  const MODULE_LABELS = { learn: "Learn", english: "English", challenge: "Challenge", practice: "Practice", review: "Review" };
+  const STATUS_KEY = "uxdl-day01-modules-v2";
+  let status = { learn: false, english: false, challenge: false, practice: false, review: false, reflection: "" };
   try {
-    const saved = JSON.parse(localStorage.getItem("uxdl-day01-status") || "{}");
-    status = { learning: saved.learning === true, practice: saved.practice === true };
+    let saved = JSON.parse(localStorage.getItem(STATUS_KEY) || "null");
+    let migrated = false;
+    if (!saved) {
+      saved = JSON.parse(localStorage.getItem("uxdl-day01-status") || "null")
+        || JSON.parse(localStorage.getItem("uxd1-day01-status") || "null");
+      migrated = Boolean(saved);
+    }
+    if (saved && typeof saved === "object") {
+      status = {
+        learn: saved.learn === true || (!MODULES.some((key) => Object.hasOwn(saved, key)) && saved.learning === true),
+        english: saved.english === true,
+        challenge: saved.challenge === true,
+        practice: saved.practice === true,
+        review: saved.review === true,
+        reflection: typeof saved.reflection === "string" ? saved.reflection : ""
+      };
+    }
+    if (migrated) localStorage.setItem(STATUS_KEY, JSON.stringify(status));
   } catch (_) { /* Keep the page usable if local browser storage is unavailable. */ }
   let toastTimer;
   function notify(message) {
@@ -129,35 +144,46 @@
     toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
   }
   function syncStatus() {
-    learningButton.classList.toggle("is-done", status.learning);
-    learningButton.setAttribute("aria-pressed", String(status.learning));
-    learningButton.querySelector(".review-text").innerHTML = `<b>Learning Completed</b><small>${status.learning ? "今天的学习已完成 · Saved on this device" : "完成今天的学习内容后标记"}</small>`;
-    learningButton.querySelector(".review-check").textContent = status.learning ? "✓" : "○";
-    practiceButton.classList.toggle("is-done", status.practice);
-    practiceButton.setAttribute("aria-pressed", String(status.practice));
-    practiceButton.querySelector(".state-text").textContent = status.practice ? "Practice completed" : "Mark practice complete";
-    document.getElementById("practiceStatus").textContent = status.practice ? "COMPLETED" : "IN PROGRESS";
-    document.getElementById("practiceStatusIcon").textContent = status.practice ? "✓" : "○";
-    document.getElementById("practiceStatusText").textContent = status.practice ? "Day 01 practice marked complete · 已完成" : "完成 Day 01 访谈计划后标记为已完成";
-    const completed = Number(status.learning) + Number(status.practice);
-    const percent = Math.round(completed / 2 * 100);
+    document.querySelectorAll("[data-complete-module]").forEach((button) => {
+      const key = button.dataset.completeModule;
+      const complete = status[key] === true;
+      button.classList.toggle("is-done", complete);
+      button.setAttribute("aria-pressed", String(complete));
+      const label = button.querySelector(".module-label, .state-text");
+      if (label) label.textContent = complete ? `✓ ${MODULE_LABELS[key]} Completed` : key === "review" ? "Complete Review" : `Mark ${MODULE_LABELS[key]} Complete`;
+      const check = button.querySelector(".module-check, .check");
+      if (check) check.textContent = complete ? "✓" : "○";
+    });
+    const completed = MODULES.filter((key) => status[key]).length;
+    const dayComplete = completed === MODULES.length;
+    const percent = completed * 20;
     document.getElementById("progressPercent").textContent = `${percent}%`;
     document.getElementById("progressBar").style.width = `${percent}%`;
-    document.getElementById("progressCopy").textContent = `Learning ${status.learning ? "✓" : "○"} · Practice ${status.practice ? "✓" : "○"}`;
+    document.getElementById("progressCopy").textContent = `${completed} of 5 Day 01 modules complete`;
+    document.getElementById("weeklyProgressCopy").textContent = `${dayComplete ? 1 : 0} / 7 days complete`;
+    document.getElementById("weekNavSummary").textContent = dayComplete ? "1 completed · 6 upcoming" : "0 completed · 1 active · 6 upcoming";
+    const dayOneLink = nav.querySelector('[data-day-index="0"]');
+    dayOneLink.querySelector(".day-status").textContent = dayComplete ? "✓" : "●";
+    dayOneLink.querySelector(".day-status").title = dayComplete ? "Completed" : "Active";
+    dayOneLink.classList.toggle("completed", dayComplete);
+    document.getElementById("reflectionInput").value = status.reflection;
+    document.getElementById("reflectionSaved").textContent = status.reflection ? "Saved in this browser · 已保存到当前浏览器" : "Saved in this browser · 保存在当前浏览器";
   }
   function saveStatus() {
-    try { localStorage.setItem("uxdl-day01-status", JSON.stringify(status)); } catch (_) { /* Keep in-memory progress for this visit. */ }
+    try { localStorage.setItem(STATUS_KEY, JSON.stringify(status)); } catch (_) { /* Keep in-memory progress for this visit. */ }
     syncStatus();
   }
-  learningButton.addEventListener("click", () => {
-    status.learning = !status.learning;
-    saveStatus();
-    notify(status.learning ? "Learning progress saved" : "Learning status reset");
+  document.querySelectorAll("[data-complete-module]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.completeModule;
+      status[key] = !status[key];
+      saveStatus();
+      notify(`${MODULE_LABELS[key]} ${status[key] ? "completed" : "marked incomplete"}`);
+    });
   });
-  practiceButton.addEventListener("click", () => {
-    status.practice = !status.practice;
+  document.getElementById("reflectionInput").addEventListener("input", (event) => {
+    status.reflection = event.target.value;
     saveStatus();
-    notify(status.practice ? "Practice progress saved" : "Practice status reset");
   });
   syncStatus();
 
@@ -200,11 +226,11 @@
     const target = extractSection(markdown, "## Target User｜目标用户");
     document.getElementById("researchSource").innerHTML = renderMarkdown(["## Research Goal｜研究目标", goal, "## Research Method｜研究方法", method, "## Target User｜目标用户", target].join("\n\n"));
     const vocab = parseVocab(markdown);
-    document.getElementById("vocabContent").innerHTML = vocab || `<p class="inline-notice">Vocabulary is included in the <a href="${sourceOnGitHub}" target="_blank" rel="noreferrer">Day 01 source</a>.</p>`;
+    document.getElementById("vocabContent").innerHTML = vocab || '<p class="inline-notice">The vocabulary section is not available in the Day 01 lesson file.</p>';
     document.getElementById("phraseContent").innerHTML = renderPhrases(markdown);
     document.getElementById("practiceContent").innerHTML = renderMarkdown(markdown);
   }).catch(() => {
-    const message = `<p class="inline-notice">The Day 01 file could not be loaded. Check the local preview server or <a href="${sourceOnGitHub}" target="_blank" rel="noreferrer">view the source on GitHub</a>.</p>`;
+    const message = '<p class="inline-notice">The Day 01 lesson file could not be loaded. Check that the local preview is served from the project folder.</p>';
     document.getElementById("researchSource").innerHTML = message;
     document.getElementById("practiceContent").innerHTML = message;
     document.getElementById("vocabContent").innerHTML = message;
