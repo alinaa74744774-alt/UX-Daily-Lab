@@ -7,6 +7,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from urllib.parse import urlparse
 
 ISSUE_NUMBER = 1
 EXPECTED_TITLE = "Day 01｜用户研究 User Research"
@@ -36,15 +37,17 @@ def request_json(url, method="GET", headers=None, payload=None):
     except urllib.error.HTTPError as exc:
         try:
             error_payload = json.loads(exc.read().decode("utf-8"))
-            message = error_payload.get("error", {}).get("message", "Unknown API error.")
+            error_data = error_payload.get("error", {})
+            message = error_data.get("message") or error_payload.get("message") or "Unknown API error."
         except (UnicodeDecodeError, json.JSONDecodeError, AttributeError):
             message = "No readable error message was returned."
         api_key = (headers or {}).get("x-goog-api-key")
         if api_key:
             message = str(message).replace(api_key, "[REDACTED]")
         message = " ".join(str(message).split())[:1000]
+        host = urlparse(url).netloc
         raise RuntimeError(
-            f"API request failed with HTTP {exc.code}: {message}"
+            f"API request to {host} failed with HTTP {exc.code}: {message}"
         ) from None
     except urllib.error.URLError as exc:
         raise RuntimeError(f"API connection failed ({exc.reason}).") from None
