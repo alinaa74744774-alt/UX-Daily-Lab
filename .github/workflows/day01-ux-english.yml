@@ -26,6 +26,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check Gemini API secret availability
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -n "$GEMINI_API_KEY" ]; then
+            echo "GEMINI_API_KEY is available"
+          else
+            echo "GEMINI_API_KEY is EMPTY"
+          fi
+
       - name: Generate and write Day 01 challenge
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
