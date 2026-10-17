@@ -11,8 +11,16 @@
     ["06", "Interactive Prototype", "交互原型", "Upcoming"],
     ["07", "Weekly Review", "每周复盘", "Locked"]
   ];
+  const icons = {
+    arrowUpRight: '<svg class="ui-icon day-arrow-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5 13 13 5M6 5h7v7"/></svg>',
+    dayDot: '<span class="day-status-dot" aria-hidden="true"></span>',
+    dayCheck: '<svg class="ui-icon day-check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>',
+    dayLock: '<svg class="ui-icon day-lock-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5.5 8V6a3.5 3.5 0 0 1 7 0v2M4.5 8h9v7h-9z"/></svg>',
+    circle: '<svg class="ui-icon status-circle-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/></svg>',
+    check: '<svg class="ui-icon check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>'
+  };
   const nav = document.getElementById("weekNav");
-  nav.innerHTML = days.map((day, index) => `<a class="day-link ${index === 0 ? "active" : ""}" href="${index === 0 ? "#top" : "#"}" data-day-index="${index}" ${index === 0 ? 'aria-current="page"' : 'aria-haspopup="dialog"'}><span class="day-num">${day[0]}</span><span class="day-title">${day[1]}<small>${day[2]}</small></span><span class="day-status" title="${day[3]}">${index === 0 ? "●" : index === 6 ? "◌" : "↗"}</span></a>`).join("");
+  nav.innerHTML = days.map((day, index) => `<a class="day-link ${index === 0 ? "active" : ""}" href="${index === 0 ? "#top" : "#"}" data-day-index="${index}" ${index === 0 ? 'aria-current="page"' : 'aria-haspopup="dialog"'}><span class="day-num">${day[0]}</span><span class="day-title">${day[1]}<small>${day[2]}</small></span><span class="day-status" title="${day[3]}">${index === 0 ? icons.dayDot : index === 6 ? icons.dayLock : icons.arrowUpRight}</span></a>`).join("");
   nav.insertAdjacentHTML("beforeend", '<div class="week-note">WEEK 01 <span id="weekNavSummary">0 completed · 1 active · 6 upcoming</span></div>');
 
   const escapeHtml = (value) => value.replace(/[&<>\"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
@@ -150,9 +158,9 @@
       button.classList.toggle("is-done", complete);
       button.setAttribute("aria-pressed", String(complete));
       const label = button.querySelector(".module-label, .state-text");
-      if (label) label.textContent = complete ? `✓ ${MODULE_LABELS[key]} Completed` : key === "review" ? "Complete Review" : `Mark ${MODULE_LABELS[key]} Complete`;
+      if (label) label.textContent = complete ? `${MODULE_LABELS[key]} Completed` : key === "review" ? "Complete Review" : `Mark ${MODULE_LABELS[key]} Complete`;
       const check = button.querySelector(".module-check, .check");
-      if (check) check.textContent = complete ? "✓" : "○";
+      if (check) check.innerHTML = complete ? icons.check : icons.circle;
     });
     const completed = MODULES.filter((key) => status[key]).length;
     const dayComplete = completed === MODULES.length;
@@ -163,7 +171,7 @@
     document.getElementById("weeklyProgressCopy").textContent = `${dayComplete ? 1 : 0} / 7 days complete`;
     document.getElementById("weekNavSummary").textContent = dayComplete ? "1 completed · 6 upcoming" : "0 completed · 1 active · 6 upcoming";
     const dayOneLink = nav.querySelector('[data-day-index="0"]');
-    dayOneLink.querySelector(".day-status").textContent = dayComplete ? "✓" : "●";
+    dayOneLink.querySelector(".day-status").innerHTML = dayComplete ? icons.dayCheck : icons.dayDot;
     dayOneLink.querySelector(".day-status").title = dayComplete ? "Completed" : "Active";
     dayOneLink.classList.toggle("completed", dayComplete);
     document.getElementById("reflectionInput").value = status.reflection;
