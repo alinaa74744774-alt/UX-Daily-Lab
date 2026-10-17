@@ -1,219 +1,200 @@
-# [Mini Project] College Textbook Exchange - Interview Plan｜大学生二手教材交换访谈计划
+# College Textbook Exchange — User Research Interview Plan｜大学生二手教材交换用户研究访谈计划
 
-> **研究类型 Research type：**探索性半结构化用户访谈  
-> **Exploratory, semi-structured user interviews**
+> **Research type｜研究类型:** Exploratory, semi-structured user interviews.  
+> 中文理解：通过开放式访谈探索学生真实的教材处理经历。
 >
-> **计划时长 Planned duration：**每位参与者 15–20 分钟  
-> **15–20 minutes per participant**
+> **Planned duration｜计划时长:** 15–20 minutes per participant.  
+> 中文理解：每位参与者约 15–20 分钟。
 >
-> **研究范围 Scope：**大学生购买、出售、交换和处理二手教材的实际行为  
-> **Current college textbook buying, selling, exchange, and disposal behaviors**
+> **Scope｜研究范围:** Current student behaviors around buying, selling, exchanging, and passing on used textbooks.  
+> 中文理解：关注学生购买、出售、交换或转让二手教材的实际行为。
 >
-> **状态 Status：**这是一份访谈计划，尚未开展访谈，也不包含参与者数据。  
-> **Interview plan only. No interviews have been conducted and no participant data is included.**
+> **Status｜状态:** Interview plan only. No interviews have been conducted and no participant data is included.  
+> 中文理解：这是一份研究计划，尚未开展访谈，也不包含参与者数据。
 
-## 研究目标 Research Goal
+## Research Goal｜研究目标
 
-**中文理解**  
-了解大学生目前如何获取和转让二手教材，包括他们采取的步骤、依赖的信息，以及过程中遇到阻碍的时刻。研究结果用于发现校园教材交换小程序的机会；在获得证据前，不预设学生需要哪种功能。
+Understand how university students currently acquire and pass on used textbooks: the steps they take, the information they rely on, and the moments that create friction. Use the findings to identify evidence-based opportunities for a campus textbook exchange mini program without assuming which feature students need.
 
-**English Version**  
-Understand how university students currently acquire and pass on used textbooks, including the steps they take, the information they rely on, and the moments that create friction. Use these findings to identify evidence-based opportunities for a campus textbook exchange mini program without assuming which feature students need.
+**中文理解：**了解学生如何获取或转让二手教材、采取哪些步骤、依赖什么信息，以及哪些环节造成阻碍。研究用于发现有证据支持的设计机会；在收集证据前不预设功能需求。
 
-## 目标用户画像（虚构） Target Persona (Fictional)
+## Target User｜目标用户
 
-**中文理解**  
-**“Lin”是一位虚构的大四学生，正在准备搬离校内宿舍。**她积累了几个学期的教材，正在决定哪些保留、出售、赠送或回收。
+### Fictional discussion prompt｜虚构讨论情境
 
-- **使用场景 Context：**搬离宿舍前整理旧教材。
-- **待了解的行为 Relevant behaviors to explore：**她如何判断教材是否还能使用、在哪里寻找书籍或买家、如何说明书况和价格，以及如何安排交接。
-- **研究说明 Research note：**Lin 只是帮助团队思考的虚构情境，不代表所有大四学生。招募近期买过、卖过、交换过二手教材或尝试转让教材的学生；参与者不必与此画像完全相符。
+**“Lin” is a fictional fourth-year undergraduate preparing to move out of campus housing.** After several semesters, Lin is deciding which textbooks to keep, sell, give away, or recycle.
 
-**English Version**  
-**“Lin,” a fictional fourth-year undergraduate preparing to move out of campus housing**
+- **Context:** Sorting used books before moving out.
+- **Behaviors to explore:** How Lin judges whether a book is reusable, where Lin looks for books or buyers, how Lin communicates condition and price, and how Lin arranges handoff.
+- **Recruitment note:** Lin is a prompt for discussion, not a real participant or a claim about all fourth-year students. Recruit students with recent experience buying, selling, exchanging, or trying to pass on a textbook; they do not need to match this scenario.
 
-- **Context:** Has accumulated textbooks from several semesters and is deciding what to keep, sell, give away, or recycle.
-- **Relevant behaviors to explore:** How Lin decides a book is reusable, where Lin looks for buyers or books, how Lin sets expectations about condition and price, and how Lin arranges handoff.
-- **Research note:** Lin is a discussion prompt, not a real participant or a claim about all fourth-year students. Recruit students with recent experience buying, selling, exchanging, or trying to pass on a used textbook; do not require them to match this persona exactly.
+**中文理解：**Lin 是帮助思考研究范围的虚构情境，并不代表所有大四学生。招募近期有二手教材买卖、交换或转让经历的学生，不要求他们符合 Lin 的背景。
 
-## 访谈提纲 Interview Guide
+## Research Method｜研究方法
 
-### 开场与知情同意 Opening and consent
+Conduct a 15–20-minute semi-structured interview about one recent or memorable textbook transaction, attempt, or decision. Start with actual past behavior, then explore expectations. Use neutral probes and avoid suggesting a marketplace, feature, or preferred solution.
 
-**中文理解**  
-“谢谢你愿意和我交流。我正在了解学生如何处理二手教材。我想知道你实际做过什么，包括过程中任何不方便或意料之外的事情。这里没有标准答案。你可以跳过任何问题，也可以随时结束访谈。我会做笔记，但不会记录能识别你身份的信息。开始前，你有什么想问的吗？”
+**中文理解：**围绕一次近期或印象深刻的经历进行半结构化访谈。先了解实际发生过的行为，再探索预期；保持中立，不推荐平台或功能。
 
-**English Version**  
-“Thanks for speaking with me. I’m learning about how students handle used textbooks. I’m interested in what you actually did, including anything that was inconvenient or unexpected. There are no right or wrong answers. You can skip any question or stop at any time. I’ll take notes without recording identifying details. Is there anything you’d like to ask before we begin?”
+### Opening and consent｜开场与知情同意
 
-请围绕一次近期或印象深刻的教材交易、尝试或决定展开。不要询问姓名、学号、联系方式、具体地址或其他敏感个人信息。
+> “Thanks for speaking with me. I’m learning about how students handle used textbooks. I’m interested in what you actually did, including anything that was inconvenient or unexpected. There are no right or wrong answers. You can skip any question or stop at any time. I’ll take notes without recording identifying details. Is there anything you’d like to ask before we begin?”
 
-Ask about one recent or memorable textbook transaction, attempt, or decision. Do not request names, student IDs, contact details, exact addresses, or other sensitive personal information.
+**中文理解：**谢谢你参与。我想了解学生处理二手教材时的真实经历，包括不方便或意料之外的部分。没有标准答案；你可以跳过问题或随时结束。我会做笔记，但不记录身份信息。开始前，你有什么问题吗？
 
-### 问题 1：了解当前流程与行为 Question 1 — Explore the current process and behaviors
+Ask about one concrete experience. Do not request names, student IDs, contact details, exact addresses, or other sensitive personal information.
 
-**中文问题**  
-“请带我回顾一下你最近一次购买、出售、交换或尝试转让二手教材的经历。从你决定要怎么处理，到整个过程结束，中间发生了什么？”
+**中文理解：**请对方回忆一段具体经历；不要询问姓名、学号、联系方式、详细地址或其他敏感信息。
 
-**English Question**  
+## Interview Questions｜访谈问题
+
+### 1. Current process and user behavior｜当前流程与用户行为
+
+**Primary question:**  
 “Please walk me through the most recent time you bought, sold, exchanged, or tried to pass on a used textbook. What happened from the moment you decided what to do until the process was finished?”
 
-**中文追问**  
-“在每个步骤中，你接下来做了什么？当时寻找了哪些信息或帮助？”
+**中文理解：**请按顺序回顾你最近一次购买、出售、交换或尝试转让二手教材的经历。从决定怎么处理开始，到事情结束，中间发生了什么？
 
-**English Probe**  
+**Neutral probe:**  
 “What did you do next at each step, and what information or help did you look for along the way?”
 
-**倾听重点 Listen for**  
-触发决定的原因、行为顺序、使用的渠道、判断标准、涉及的其他人，以及用户采用的变通方法。不要主动推荐某个平台或功能。
+**中文理解：**每一步之后你做了什么？过程中寻找了哪些信息或帮助？
 
-Trigger, sequence of actions, channels used, decision criteria, other people involved, and workarounds. Do not suggest a particular marketplace or feature.
+**Listen for:** Triggers, sequence of actions, channels, decision criteria, people involved, and workarounds. Do not suggest a particular marketplace or feature.
 
-**术语应用 Vocabulary in context**  
-用户研究（**User Research**）：在决定要开发什么之前，通过访谈收集用户真实行为的证据。  
-*User research* — the interview gathers evidence about real behaviors before the team decides what to build.
+**中文理解：**留意触发原因、行为顺序、使用渠道、判断标准、相关人员和变通做法，不要主动建议平台或功能。
 
-### 问题 2：了解阻碍与痛点 Question 2 — Explore friction and pain points
+### 2. Friction and Pain Points｜阻碍与用户痛点
 
-**中文问题**  
-“回想这段经历中一个比你预期更费力的时刻。当时发生了什么？你是如何应对的？”
-
-**English Question**  
+**Primary question:**  
 “Think of a moment in that experience that took more effort than you expected. What was happening, and how did you respond?”
 
-**中文追问**  
-“你能具体描述一下当时是什么让那一刻变得困难，以及之后发生了什么吗？”
+**中文理解：**回想这段经历中一个比预期更费力的时刻。当时发生了什么？你是如何应对的？
 
-**English Probe**  
+**Neutral probe:**  
 “Can you describe a specific example of what made that moment difficult and what happened afterward?”
 
-**倾听重点 Listen for**  
-记录参与者自己描述的痛点（**Pain Point**）、发生情境、若对方主动提及则记录频率、影响，以及采取的变通方式。不要预设一定存在困难；如果参与者表示没有，可以询问是什么让流程顺利。
+**中文理解：**能否举例说明当时具体是什么让事情变困难，之后又发生了什么？
 
-The participant’s own description of a **pain point**, its context, frequency if they volunteer it, its effect, and the workaround used. Do not assume that a difficulty occurred; if the participant reports none, ask what made the process straightforward.
+**Listen for:** The participant’s own description of a **Pain Point 用户痛点**, its context and effect, and any workaround. Record frequency only if they volunteer it. Do not assume a difficulty occurred; if the process felt smooth, ask what helped.
 
-### 问题 3：了解心理模型与预期 Question 3 — Explore the mental model and expectations
+**中文理解：**记录参与者自己的描述、情境、影响和变通方式；频率只记录对方主动提到的内容。不要预设一定有痛点。
 
-**中文问题**  
-“当你想象通过校园服务交换二手教材时，你预期整个过程会有哪些步骤？从找到书或买家，一直到完成交接。”
+### 3. Mental Model and Expectations｜心理模型与预期
 
-**English Question**  
+**Primary question:**  
 “When you imagine arranging a used textbook exchange through a campus service, what steps would you expect to happen from finding a book or buyer through completing the handoff?”
 
-**中文追问**  
-“在每一步中，你预期学生和服务分别做什么？哪些信息会帮助你决定下一步怎么做？”
+**中文理解：**想象通过校园服务交换二手教材：从找到书或买家到完成交接，你预期会经过哪些步骤？
 
-**English Probe**  
+**Neutral probe:**  
 “At each step, what would you expect the student and the service to do, and what information would help you decide what to do next?”
 
-**倾听重点 Listen for**  
-参与者对流程的心理模型（**Mental Model**）、对书况与可获得性的预期、对信任和付款的假设，以及他们认为什么才算成功交接。把这些预期视为待研究的假设，而不是已经验证的需求。
+**中文理解：**每一步中，你预期学生和服务分别做什么？哪些信息能帮助你决定下一步？
 
-The participant’s **mental model** of the process, expectations about book condition and availability, trust and payment assumptions, and what a successful handoff means to them. Treat expectations as hypotheses to investigate, not requirements already validated.
+**Listen for:** The participant’s **Mental Model 心理模型**, expectations about condition and availability, assumptions about trust and payment, and their definition of a successful handoff. Treat these as hypotheses to investigate, not validated requirements.
 
-### 中性追问 Neutral follow-up prompts
+**中文理解：**留意参与者对流程、书况、可获得性、信任和付款的理解，以及他们如何定义成功交接。这些是待验证的假设，不是已确认的需求。
 
-**中文理解**  
-仅在需要澄清时使用，让参与者用自己的话回答。
+### Neutral follow-up prompts｜中性追问
 
-**English Version**  
-Use only when clarification would help; allow the participant to answer in their own words.
+Use these only when clarification would help; let the participant answer in their own words.
 
-- “你能再多说一点吗？” — “Could you tell me a little more about that?”
-- “那之前发生了什么？” — “What happened just before that?”
-- “接下来你做了什么？” — “What did you do next?”
-- “你当时是怎么判断的？” — “How did you decide?”
-- “如果有的话，你会想改变这段经历中的什么？” — “What, if anything, would you change about that experience?”
+**中文理解：**仅在需要澄清时使用，给参与者空间用自己的话回答。
 
-避免赞许、纠正或提出可能引导回答的功能建议。先询问具体的过往经历，再探索假设性的偏好。
+- “Could you tell me a little more about that?”｜你能再多说一点吗？
+- “What happened just before that?”｜那之前发生了什么？
+- “What did you do next?”｜接下来你做了什么？
+- “How did you decide?”｜你当时是怎么判断的？
+- “What, if anything, would you change about that experience?”｜如果可以，你会想改变那段经历中的什么？
 
-Avoid praise, correction, or feature suggestions that could steer the response. Ask about a concrete past example before exploring hypothetical preferences.
+Avoid praise, correction, and leading feature suggestions. Ask about a concrete past example before exploring hypothetical preferences.
+
+**中文理解：**避免赞许、纠正或暗示功能方案。先问具体过往经历，再讨论假设偏好。
 
 ## UX English Learning｜UX 专业英语学习
 
-以下 5 个术语均提供英文释义、中文解释、贴合本项目的英文例句和中文翻译，便于拼写、理解和实际应用。
+### 1. User Research 用户研究
 
-Each term includes an English definition, a Chinese explanation, a UX-context example sentence, and its Chinese translation for spelling, comprehension, and practical use.
+- **Definition:** The systematic study of target users to inform product decisions.  
+  中文解释：系统地研究目标用户，并用发现支持产品决策。
+- **UX example:** “Our user research starts with students’ actual exchange behaviors before we define product features.”  
+  例句理解：先研究学生真实的交换行为，再定义功能。
 
-### 1. 用户研究（User Research）
+### 2. Pain Point 用户痛点
 
-- **英文释义 English definition：**The systematic study of target users to inform product decisions.
-- **中文解释 Chinese explanation：**系统地研究目标用户，并用研究发现帮助团队做产品决策。
-- **UX 场景例句 UX example：**“This user research starts with students’ actual textbook exchange behaviors before defining product features.”
-- **例句翻译 Translation：**这项用户研究先了解学生实际的教材交换行为，再定义产品功能。
+- **Definition:** A specific difficulty or frustration within an experience.  
+  中文解释：用户在某段体验中遇到的具体困难或挫折。
+- **UX example:** “The interview surfaced a pain point around coordinating a convenient handoff.”  
+  例句理解：访谈发现了安排方便交接时的一个痛点。
 
-### 2. 痛点（Pain Point）
+### 3. Mental Model 心理模型
 
-- **英文释义 English definition：**A specific difficulty or frustration in an experience.
-- **中文解释 Chinese explanation：**用户在某段体验中遇到的具体困难或挫折。
-- **UX 场景例句 UX example：**“Question 2 asks the participant to describe a specific pain point and its effect without presuming one exists.”
-- **例句翻译 Translation：**问题 2 请参与者描述一个具体痛点及其影响，同时不预设痛点一定存在。
+- **Definition:** A person’s beliefs and expectations about how a system or process works.  
+  中文解释：用户对系统或流程如何运作的理解与预期。
+- **UX example:** “We asked students to describe their mental model of a campus textbook exchange.”  
+  例句理解：我们请学生描述他们对校园教材交换流程的理解。
 
-### 3. 心理模型（Mental Model）
+### 4. User Behavior 用户行为
 
-- **英文释义 English definition：**A person’s beliefs and expectations about how a system or process works.
-- **中文解释 Chinese explanation：**用户根据经验形成的、对系统或流程如何运作的理解与预期。
-- **UX 场景例句 UX example：**“Question 3 explores the participant’s mental model of the steps, responsibilities, and information needed for a campus exchange.”
-- **例句翻译 Translation：**问题 3 探索参与者对于校园教材交换所需步骤、各方职责和相关信息的心理模型。
+- **Definition:** The actions people take in a specific context to reach a goal.  
+  中文解释：用户在具体情境中为达成目标所采取的行动。
+- **UX example:** “We documented user behavior across the search, decision, and handoff stages.”  
+  例句理解：我们记录了搜索、决策和交接各阶段的用户行为。
 
-### 4. 半结构化访谈（Semi-structured Interview）
+### 5. Semi-structured Interview 半结构化访谈
 
-- **英文释义 English definition：**An interview using planned open questions while allowing relevant follow-up questions.
-- **中文解释 Chinese explanation：**访谈者准备开放式核心问题，并根据回答灵活追问的一种访谈方法。
-- **UX 场景例句 UX example：**“This semi-structured interview uses three core questions and neutral probes to explore unexpected details.”
-- **例句翻译 Translation：**这次半结构化访谈通过三个核心问题和中性追问，进一步了解意料之外的细节。
+- **Definition:** An interview guided by planned open questions, with room for relevant follow-up probes.  
+  中文解释：以预设开放问题为主，并可根据回答灵活追问的访谈方法。
+- **UX example:** “A semi-structured interview helped us follow unexpected details while covering the same core topics.”  
+  例句理解：半结构化访谈让我们在覆盖核心主题的同时，追问意料之外的细节。
 
-### 5. 定性数据（Qualitative Data）
+### Phrases to remember｜值得记忆的表达
 
-- **英文释义 English definition：**Non-numerical evidence such as descriptions, quotes, and observed behaviors that helps explain why people act as they do.
-- **中文解释 Chinese explanation：**描述、原话和观察到的行为等非数字信息，可帮助理解用户为什么这样行动。
-- **UX 场景例句 UX example：**“Interview notes are qualitative data; they can suggest patterns but do not establish how common a behavior is among all students.”
-- **例句翻译 Translation：**访谈笔记属于定性数据，可以提示我们留意某些模式，但不能证明某种行为在所有学生中有多普遍。
+- **“Could you walk me through what happened?”** — Invite a step-by-step account rather than a summary.  
+  中文理解：邀请对方按步骤讲述经历，而不只是给结论。
+- **“What happened next?”** — A concise, neutral probe for sequence and behavior.  
+  中文理解：简短、中性的追问，用来了解行为顺序。
 
-### 值得记忆的 UX 英语表达 Phrases to remember
+## Note-taking and Synthesis｜记录与综合
 
-1. **“Could you walk me through what happened?”** — “你能按顺序带我回顾一下发生了什么吗？”  
-   用于邀请用户叙述完整经历，而不是只给出结论。  
-   Use it to invite a complete account of an experience rather than just a conclusion.
+Separate participant evidence from researcher interpretation.
 
-2. **“What happened next?”** — “接下来发生了什么？”  
-   用于中性追问，帮助了解行为顺序，不暗示用户应该采取什么行动。  
-   Use it as a neutral probe to understand the sequence of behaviors without suggesting what the participant should have done.
+**中文理解：**区分参与者证据与研究者解释。
 
-## 记录与综合 Note-taking and synthesis
-
-每次访谈都应区分参与者的原话与研究者的解释。
-
-For each interview, separate what the participant said from the researcher’s interpretation.
-
-| 主题 Topic | 记录提示 Note-taking prompt |
+| Research area｜研究维度 | What to capture｜记录内容 |
 |---|---|
-| 情境与目标 Situation and goal | 参与者当时想完成什么。<br>What the participant was trying to do. |
-| 行为与顺序 Actions and sequence | 他们实际做了什么，以及先后顺序。<br>What they actually did, in order. |
-| 证据与判断标准 Evidence and decision criteria | 他们用了哪些信息、为什么使用。<br>Information they used and why. |
-| 阻碍或变通方法 Friction or workaround | 参与者的原话、发生情境和影响。<br>The participant’s words, context, and effect. |
-| 预期 Expectations | 他们预期每一步会如何进行。<br>What they expected to happen at each step. |
-| 后续问题 Follow-up question | 哪些信息仍不清楚；避免自行补全。<br>What remains unclear; avoid filling gaps with assumptions. |
+| Situation and goal｜情境与目标 | What the participant was trying to do.｜参与者想完成什么。 |
+| User Behavior｜用户行为 | What they actually did, in sequence.｜实际采取了哪些行动及其顺序。 |
+| Evidence and decisions｜信息与决策 | What information they used and why.｜使用了哪些信息，以及原因。 |
+| Pain Points and workarounds｜痛点与变通 | Participant’s own words, context, and effect.｜参与者原话、发生情境和影响。 |
+| Expectations｜预期 | What they expected at each step.｜他们对每一步的预期。 |
+| Open questions｜待澄清问题 | What remains unclear; do not fill gaps with assumptions.｜尚不清楚的部分，不要自行假设补全。 |
 
-访谈后，将重复出现的观察整理成**待进一步研究的主题（themes to investigate）**，同时保留差异和反例。不要把单一参与者的看法当成普遍需求的证据或已验证的产品要求。
+After interviews, group recurring observations into **themes to investigate**, while preserving differences and counterexamples. One participant’s comment is not proof of a universal need or a validated product requirement.
 
-After interviews, group recurring observations as **themes to investigate**, preserving variation and counterexamples. Do not treat one participant’s comment as proof of a universal need or as a validated product requirement.
+**中文理解：**将重复出现的观察整理为待研究主题，同时保留差异和反例。单个参与者的看法不能证明普遍需求，也不是已验证的产品要求。
 
-## 完成标准 Completion Checklist
+## Completion Checklist｜完成标准
 
-- [x] **UX 产出 UX deliverable：**包含 3 个完整开放式访谈问题和对应追问。<br>Contains three complete, open-ended interview questions with follow-up probes.
-- [x] **行为与痛点 Behaviors and pain points：**问题探索真实行为、可能的阻碍和用户预期，不预设痛点或提出解决方案。<br>Questions explore actual behaviors, possible friction, and expectations without assuming a pain point or proposing a solution.
-- [x] **英语学习 UX English learning：**准确呈现 5 个术语的拼写、释义和场景例句，并在提纲中实际应用。<br>Includes five accurately applied UX English terms with definitions and contextual example sentences.
-- [x] **隐私 Privacy：**使用虚构画像，不包含真实参与者的敏感个人信息。<br>Uses a fictional persona and contains no real participant’s sensitive personal information.
-- [x] **归档 Filing：**使用指定文件名 `Day01_User_Research_Interview_Plan.md`。<br>Saved with the requested filename `Day01_User_Research_Interview_Plan.md`.
+- [x] **Research deliverable:** Three open-ended questions, relevant probes, and listening guidance are included.  
+  中文理解：包含 3 个开放问题、相关追问和倾听重点。
+- [x] **Research quality:** Questions explore actual behavior, potential friction, and expectations without assuming a problem or prescribing a solution.  
+  中文理解：探索真实行为、潜在阻碍与预期，不预设问题或给方案。
+- [x] **English learning:** Five UX terms are defined and used in contextual examples; two practical interview phrases are included.  
+  中文理解：包含 5 个术语的释义与场景例句，以及 2 个实用表达。
+- [x] **Privacy:** The persona is fictional; no real participant’s sensitive information is included.  
+  中文理解：画像为虚构内容，不包含真实参与者的敏感信息。
+- [x] **Filing:** Saved as `Day01_User_Research_Interview_Plan.md`.  
+  中文理解：文件名符合要求。
 
-## 建议的 45 分钟学习安排 Suggested 45-minute work session
+## Suggested 45-minute Session｜建议的 45 分钟学习安排
 
-1. **词汇复习 Vocabulary review — 8 分钟 / minutes：**阅读、拼写并用自己的话解释以上 5 个术语。  
-   Read, spell, and explain the five terms above in your own words.
-2. **研究目标与用户画像 Research goal and persona — 7 分钟 / minutes：**复核研究目标；只有研究范围变化时才调整虚构画像。  
-   Review the goal and adapt the fictional persona only if the research scope changes.
-3. **问题与追问 Questions and probes — 20 分钟 / minutes：**演练 3 个问题，确认每个问题都能邀请用户讲述经历，而不是只回答是或否。  
-   Rehearse the three questions; check that each invites a story rather than a yes/no answer.
-4. **格式与自查 Format and self-review — 10 分钟 / minutes：**检查提问是否中性、是否保护隐私，以及是否符合完成标准。  
-   Check neutrality, privacy, and the completion checklist.
+1. **Vocabulary review — 8 min:** Read the five terms aloud and explain each in your own words.  
+   中文理解：朗读 5 个术语，并用自己的话解释。
+2. **Research framing — 7 min:** Review the goal and fictional target-user context.  
+   中文理解：复核研究目标和虚构用户情境。
+3. **Interview practice — 20 min:** Rehearse the questions and probes; check for neutral, open wording.  
+   中文理解：演练问题和追问，检查是否开放且中立。
+4. **Self-review — 10 min:** Check privacy, evidence-focused listening, and completion criteria.  
+   中文理解：检查隐私保护、证据导向的倾听和完成标准。
