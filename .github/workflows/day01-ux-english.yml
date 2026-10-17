@@ -1,0 +1,35 @@
+name: Day 01 UX × English Challenge
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_regenerate:
+        description: Regenerate the challenge if one is already present
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ux-english-day-01
+  cancel-in-progress: false
+
+jobs:
+  generate-day-01:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate and write Day 01 challenge
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          FORCE_REGENERATE: ${{ inputs.force_regenerate }}
+        run: python .github/scripts/generate_day01.py
