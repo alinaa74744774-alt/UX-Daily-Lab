@@ -12,7 +12,7 @@ ISSUE_NUMBER = 1
 EXPECTED_TITLE = "Day 01｜用户研究 User Research"
 MARKER_START = "<!-- ux-english-challenge:day-01:start -->"
 MARKER_END = "<!-- ux-english-challenge:day-01:end -->"
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.8-flash"
 GITHUB_API = "https://api.github.com"
 GEMINI_API = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
@@ -34,8 +34,18 @@ def request_json(url, method="GET", headers=None, payload=None):
             raw = response.read().decode("utf-8")
             return json.loads(raw) if raw else {}
     except urllib.error.HTTPError as exc:
-        # Do not print response bodies: upstream errors can echo request details.
-        raise RuntimeError(f"API request failed with HTTP {exc.code}.") from None
+        try:
+            error_payload = json.loads(exc.read().decode("utf-8"))
+            message = error_payload.get("error", {}).get("message", "Unknown API error.")
+        except (UnicodeDecodeError, json.JSONDecodeError, AttributeError):
+            message = "No readable error message was returned."
+        api_key = (headers or {}).get("x-goog-api-key")
+        if api_key:
+            message = str(message).replace(api_key, "[REDACTED]")
+        message = " ".join(str(message).split())[:1000]
+        raise RuntimeError(
+            f"API request failed with HTTP {exc.code}: {message}"
+        ) from None
     except urllib.error.URLError as exc:
         raise RuntimeError(f"API connection failed ({exc.reason}).") from None
 
