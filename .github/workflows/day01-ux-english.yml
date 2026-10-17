@@ -28,17 +28,17 @@ jobs:
 
       - name: Check Gemini API secret availability
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_KEY_TEST: ${{ secrets.GEMINI_KEY_TEST }}
         run: |
           if [ -n "$GEMINI_API_KEY" ]; then
-            echo "GEMINI_API_KEY is available"
+            echo "GEMINI_KEY_TEST is available"
           else
-            echo "GEMINI_API_KEY is EMPTY"
+            echo "GEMINI_KEY_TEST is EMPTY"
           fi
 
       - name: Generate and write Day 01 challenge
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_KEY_TEST: ${{ secrets.GEMINI_KEY_TEST }}
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           FORCE_REGENERATE: ${{ inputs.force_regenerate }}
