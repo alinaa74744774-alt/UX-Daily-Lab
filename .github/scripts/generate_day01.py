@@ -102,8 +102,18 @@ def main():
     token = os.environ.get("GITHUB_TOKEN")
     repo = os.environ.get("GITHUB_REPOSITORY")
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not token or not repo or not api_key:
-        raise RuntimeError("A required workflow credential or repository setting is missing.")
+    missing = [
+        name for name, value in (
+            ("GITHUB_TOKEN", token),
+            ("GITHUB_REPOSITORY", repo),
+            ("GEMINI_API_KEY", api_key),
+        )
+        if not value
+    ]
+    if missing:
+        raise RuntimeError(
+            "Missing required workflow environment variable(s): " + ", ".join(missing)
+        )
 
     issue_url = f"{GITHUB_API}/repos/{repo}/issues/{ISSUE_NUMBER}"
     headers = github_headers(token)
