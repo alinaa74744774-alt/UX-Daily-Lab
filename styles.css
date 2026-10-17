@@ -227,6 +227,30 @@
   .welcome .progress-foot{font-size:6.5px}
 }
 
+/* Cross-platform, monochrome inline UI icons */
+.ui-icon{display:block;width:16px;height:16px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.menu-icon{width:20px;height:20px}
+.clock-svg{width:14px;height:14px}
+.button-icon,.float-pill-icon{display:inline-flex;align-items:center;justify-content:center}
+.button-icon .ui-icon{width:15px;height:15px}
+.float-pill-icon .ui-icon{width:13px;height:13px}
+.research-icon .ui-icon,.challenge-icon .ui-icon{width:13px;height:13px}
+.sequence-connector .ui-icon{width:15px;height:15px}
+.day-status .ui-icon{width:14px;height:14px;margin:auto}
+.day-lock-icon{width:13px!important;height:13px!important}
+.day-status-dot{display:block;width:7px;height:7px;margin:auto;border-radius:50%;background:#31a56a}
+.day-arrow-icon,.float-pill-icon .arrow-up-right-icon{width:16px;height:16px}
+.dots{display:block;width:14px;height:4px;background:radial-gradient(circle,currentColor 1.4px,transparent 1.5px) 0 0/5px 4px repeat-x}
+.module-check .ui-icon,.check .ui-icon{width:12px;height:12px;margin:auto}
+.source-check .ui-icon{width:11px;height:11px;vertical-align:middle}
+.criteria-head>span .ui-icon{width:14px;height:14px}
+.review-check .ui-icon{width:13px;height:13px}
+.expand-chevron .ui-icon{width:14px;height:14px}
+.dialog-close .ui-icon{width:17px;height:17px;margin:auto}
+.dialog-ok .ui-icon{width:14px;height:14px}
+.clock-icon,.research-icon,.challenge-icon,.float-pill-icon,.source-check,.expand-chevron,.dialog-ok>span{display:inline-flex;align-items:center;justify-content:center}
+.dialog-close{display:grid;place-items:center}
+
 /* V2.2 — tablet / iPad layout (mobile rules at <=767px remain untouched) */
 @media(min-width:768px) and (max-width:1199px){
   .rail{
