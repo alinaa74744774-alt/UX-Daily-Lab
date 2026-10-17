@@ -117,37 +117,37 @@ Avoid praise, correction, and leading feature suggestions. Ask about a concrete 
 ### 1. User Research 用户研究
 
 - **Definition:** The systematic study of target users to inform product decisions.  
-  中文解释：系统地研究目标用户，并用发现支持产品决策。
+  中文解释：有计划地了解目标用户的目标、行为与使用情境，并以研究证据支持产品决策。
 - **UX example:** “Our user research starts with students’ actual exchange behaviors before we define product features.”  
-  例句理解：先研究学生真实的交换行为，再定义功能。
+  例句理解：我们先了解学生实际如何交换教材，再讨论产品功能，避免过早围绕未经验证的想法设计。
 
 ### 2. Pain Point 用户痛点
 
 - **Definition:** A specific difficulty or frustration within an experience.  
-  中文解释：用户在某段体验中遇到的具体困难或挫折。
+  中文解释：用户为完成目标时遇到的具体困难或挫折；理解痛点时还要关注它出现的情境和造成的影响。
 - **UX example:** “The interview surfaced a pain point around coordinating a convenient handoff.”  
-  例句理解：访谈发现了安排方便交接时的一个痛点。
+  例句理解：访谈发现，安排一个双方都方便的交接时间，是教材交换过程中的一项实际阻碍。
 
 ### 3. Mental Model 心理模型
 
 - **Definition:** A person’s beliefs and expectations about how a system or process works.  
-  中文解释：用户对系统或流程如何运作的理解与预期。
+  中文解释：用户基于既有经验形成的系统运作理解与预期；它会影响用户如何判断当前状态以及下一步该做什么。
 - **UX example:** “We asked students to describe their mental model of a campus textbook exchange.”  
-  例句理解：我们请学生描述他们对校园教材交换流程的理解。
+  例句理解：我们请学生讲述自己认为校园教材交换会如何进行，以了解他们对整个流程的心理模型。
 
 ### 4. User Behavior 用户行为
 
 - **Definition:** The actions people take in a specific context to reach a goal.  
-  中文解释：用户在具体情境中为达成目标所采取的行动。
+  中文解释：用户在特定情境中为达成目标而采取的实际行动；研究时可观察行为顺序、使用渠道和临时变通做法。
 - **UX example:** “We documented user behavior across the search, decision, and handoff stages.”  
-  例句理解：我们记录了搜索、决策和交接各阶段的用户行为。
+  例句理解：我们记录了学生搜索教材、做出选择到安排交接各阶段的实际行为。
 
 ### 5. Semi-structured Interview 半结构化访谈
 
 - **Definition:** An interview guided by planned open questions, with room for relevant follow-up probes.  
-  中文解释：以预设开放问题为主，并可根据回答灵活追问的访谈方法。
+  中文解释：访谈者围绕预先设计的开放问题展开交流，同时根据参与者的实际回答追问值得深入的细节；既能覆盖核心主题，也保留探索空间。
 - **UX example:** “A semi-structured interview helped us follow unexpected details while covering the same core topics.”  
-  例句理解：半结构化访谈让我们在覆盖核心主题的同时，追问意料之外的细节。
+  例句理解：半结构化访谈让研究者在覆盖相同核心主题的同时，继续追问意料之外但有价值的细节。
 
 ### Phrases to remember｜值得记忆的表达
 
@@ -198,3 +198,4 @@ After interviews, group recurring observations into **themes to investigate**, w
    中文理解：演练问题和追问，检查是否开放且中立。
 4. **Self-review — 10 min:** Check privacy, evidence-focused listening, and completion criteria.  
    中文理解：检查隐私保护、证据导向的倾听和完成标准。
+
