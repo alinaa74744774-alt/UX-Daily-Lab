@@ -21,8 +21,8 @@
   const escapeHtml = (s) => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const inline = (s) => escapeHtml(s)
     .replace(/`([^`]+)`/g,"<code>$1</code>")
-    .replace(/**([^*]+)**/g,"<strong>$1</strong>")
-    .replace(/*([^*]+)*/g,"<em>$1</em>")
+    .replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g,"<em>$1</em>")
     .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank" rel="noreferrer">$1</a>');
   function renderMarkdown(markdown) {
     const lines = markdown.replace(/\r/g,"").split("\n");
