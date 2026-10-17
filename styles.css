@@ -315,27 +315,20 @@
 }
 
 
-/* Review textarea: lock mobile Safari input typography to the intended 16px scale. */
+/* Mobile Review textarea typography only. */
 @media (max-width:767px){
-  #review #reflectionInput{
+  #review textarea#reflectionInput{
     font-family:"DM Sans","PingFang SC","Microsoft YaHei",sans-serif;
     font-size:16px;
     font-weight:400;
     line-height:1.6;
-    letter-spacing:normal;
     color:var(--ink);
-    -webkit-text-size-adjust:100%;
-    text-size-adjust:100%;
   }
-  #review #reflectionInput::placeholder{
+  #review textarea#reflectionInput::placeholder{
     font-family:"DM Sans","PingFang SC","Microsoft YaHei",sans-serif;
     font-size:16px;
     font-weight:400;
     line-height:1.6;
-    letter-spacing:normal;
     color:#9aa49d;
-    opacity:1;
-    -webkit-text-size-adjust:100%;
-    text-size-adjust:100%;
   }
 }
