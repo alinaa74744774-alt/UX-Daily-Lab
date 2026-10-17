@@ -298,3 +298,14 @@
   font:400 9px/1.5 "DM Sans","PingFang SC","Microsoft YaHei",sans-serif;
 }
 
+
+
+/* Mobile Safari safeguard: functional SVGs keep a bounded canvas and never intercept taps. */
+.ui-icon{
+  max-width:24px;
+  max-height:24px;
+  flex-grow:0;
+  flex-shrink:0;
+  align-self:center;
+  pointer-events:none;
+}
