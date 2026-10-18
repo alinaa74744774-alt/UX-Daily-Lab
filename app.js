@@ -1,254 +1,111 @@
 (() => {
-  "use strict";
-  const sourcePath = "Day01_User_Research_Interview_Plan.md";
-  const sourceUrl = `./${encodeURIComponent(sourcePath)}`;
-  const days = [
-    ["01", "User Research", "用户研究", "Active"],
-    ["02", "User Persona", "用户画像", "Upcoming"],
-    ["03", "Information Architecture", "信息架构", "Upcoming"],
-    ["04", "User Flow", "用户流程", "Upcoming"],
-    ["05", "UI Design", "界面设计", "Upcoming"],
-    ["06", "Interactive Prototype", "交互原型", "Upcoming"],
-    ["07", "Weekly Review", "每周复盘", "Locked"]
-  ];
-  const icons = {
-    arrowUpRight: '<svg width="16" height="16" class="ui-icon day-arrow-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5 13 13 5M6 5h7v7"/></svg>',
-    dayDot: '<span class="day-status-dot" aria-hidden="true"></span>',
-    dayCheck: '<svg width="16" height="16" class="ui-icon day-check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>',
-    dayLock: '<svg width="16" height="16" class="ui-icon day-lock-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M5.5 8V6a3.5 3.5 0 0 1 7 0v2M4.5 8h9v7h-9z"/></svg>',
-    circle: '<svg width="16" height="16" class="ui-icon status-circle-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/></svg>',
-    check: '<svg width="16" height="16" class="ui-icon check-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>'
-  };
-  const nav = document.getElementById("weekNav");
-  nav.innerHTML = days.map((day, index) => `<a class="day-link ${index === 0 ? "active" : ""}" href="${index === 0 ? "#top" : "#"}" data-day-index="${index}" ${index === 0 ? 'aria-current="page"' : 'aria-haspopup="dialog"'}><span class="day-num">${day[0]}</span><span class="day-title">${day[1]}<small>${day[2]}</small></span><span class="day-status" title="${day[3]}">${index === 0 ? icons.dayDot : index === 6 ? icons.dayLock : icons.arrowUpRight}</span></a>`).join("");
-  nav.insertAdjacentHTML("beforeend", '<div class="week-note">WEEK 01 <span id="weekNavSummary">0 completed · 1 active · 6 upcoming</span></div>');
+"use strict";
+const MODULES=["learn","english","challenge","practice","review"];
+const LABELS={learn:"Learn",english:"English",challenge:"Challenge",practice:"Practice",review:"Review"};
+const el=id=>document.getElementById(id);
+const safe=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let courses=[],current=null,state=blank(),toastTimer;
+function blank(){return {learn:false,english:false,challenge:false,practice:false,review:false,reflection:""}}
+function mdInline(s){return safe(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>").replace(/\*([^*]+)\*/g,"<em>$1</em>")}
+function renderMd(source){
+ const lines=String(source||"").replace(/\r/g,"").split("\n");let out="",list="",quote=false,table=false;
+ const cl=()=>{if(list){out+="</"+list+">";list=""}},cq=()=>{if(quote){out+="</blockquote>";quote=false}},ct=()=>{if(table){out+="</tbody></table>";table=false}};
+ for(const raw of lines){const x=raw.trim();if(!x){cl();cq();ct();continue}
+  if(/^\|.*\|$/.test(x)){cl();cq();const cells=x.slice(1,-1).split("|").map(y=>y.trim());if(cells.every(y=>/^:?-{3,}:?$/.test(y)))continue;if(!table){out+="<table><thead><tr>"+cells.map(y=>"<th>"+mdInline(y)+"</th>").join("")+"</tr></thead><tbody>";table=true}else out+="<tr>"+cells.map(y=>"<td>"+mdInline(y)+"</td>").join("")+"</tr>";continue}
+  ct();const h=x.match(/^(#{1,4})\s+(.*)$/);if(h){cl();cq();const n=h[1].length;out+="<h"+n+">"+mdInline(h[2])+"</h"+n+">";continue}
+  if(/^---+$/.test(x)){cl();cq();out+="<hr>";continue}
+  if(/^>\s?/.test(x)){cl();if(!quote){out+="<blockquote>";quote=true}out+="<p>"+mdInline(x.replace(/^>\s?/,""))+"</p>";continue}
+  cq();const u=x.match(/^[-*]\s+(.*)$/),o=x.match(/^\d+\.\s+(.*)$/);if(u||o){const k=u?"ul":"ol";if(list!==k){cl();out+="<"+k+">";list=k}out+="<li>"+mdInline((u||o)[1])+"</li>";continue}
+  cl();out+="<p>"+mdInline(x)+"</p>";
+ }
+ cl();cq();ct();return out;
+}
+function sections(md){let out=[],cur=null;for(const line of String(md||"").replace(/\r/g,"").split("\n")){const m=line.match(/^##\s+(.*)$/);if(m){cur={heading:m[1].trim(),body:[]};out.push(cur)}else if(cur)cur.body.push(line)}out.forEach(x=>x.body=x.body.join("\n").trim());return out}
+function norm(s){return String(s||"").replace(/^\d+\s*/,"").replace(/[｜|]/g," ").replace(/\s+/g," ").trim().toLowerCase()}
+function findSec(list,re){return list.find(x=>re.test(norm(x.heading)))||null}
+function getLegacy(s){return {goal:findSec(s,/^research goal/),method:findSec(s,/^research method/),target:findSec(s,/^target user/),questions:findSec(s,/^(interview questions|neutral follow-up)/),criteria:findSec(s,/^completion checklist/),session:findSec(s,/^suggested (45-minute )?session/) }}
+function getContent(md,s){
+ const learn=findSec(s,/^learn(?:\s|$)/),english=findSec(s,/^(ux )?english(?:\s|$)/),challenge=findSec(s,/^(daily ux )?challenge(?:\s|$)/),practice=findSec(s,/^(practice|mini project|deliverable)(?:\s|$)/),review=findSec(s,/^(review|reflection prompt)(?:\s|$)/),old=getLegacy(s);
+ return {learn:learn?learn.body:[old.goal,old.method,old.target,old.questions].filter(Boolean).map(x=>"## "+x.heading+"\n\n"+x.body).join("\n\n"),english:english?english.body:"",challenge:challenge?challenge.body:[old.criteria,old.session].filter(Boolean).map(x=>"## "+x.heading+"\n\n"+x.body).join("\n\n"),practice:practice?practice.body:String(md||"").replace(/^#.*(?:\r?\n)+/,"").trim(),review:review?review.body:"",legacy:!challenge};
+}
+function blocks(source){let a=[],cur=null;for(const line of String(source||"").replace(/\r/g,"").split("\n")){const m=line.match(/^#{2,3}\s+(.*)$/);if(m){cur={title:m[1].trim(),body:[]};a.push(cur)}else if(cur)cur.body.push(line);else if(line.trim()){cur={title:"",body:[]};a.push(cur);cur.body.push(line)}}return a.map(x=>({...x,body:x.body.join("\n").trim()})).filter(x=>x.title||x.body)}
+function renderLearn(c,ss){
+ const sec=findSec(ss,/^learn(?:\s|$)/),old=getLegacy(ss);
+ const items=sec?blocks(sec.body):[old.goal,old.method,old.target,old.questions].filter(Boolean).map(x=>({title:x.heading,body:x.body}));
+ if(!items.length)return '<p class="inline-notice">Learn content is not available yet.｜本课程暂未提供 Learn 内容。</p>';
+ return items.map((x,i)=>'<article class="concept-card '+(i?"sequence-card":"concept-feature")+' dynamic-lesson-card"><span class="'+(i?"concept-number":"card-kicker")+'">'+(i?String(i+1).padStart(2,"0")+" · UX FUNDAMENTAL":"CORE IDEA")+'</span><h3>'+safe(x.title||"Today’s idea")+'</h3><div class="markdown-content dynamic-card-copy">'+renderMd(x.body)+'</div></article>').join("")
+}
+function txtFirst(s){for(const raw of String(s||"").split(/\r?\n/)){const x=raw.trim();if(!x||/^#{1,4}\s|^[|>*-]/.test(x)||/^中文(?:理解|解释)/.test(x))continue;const y=x.replace(/\*\*/g,"").replace(/\*/g,"").trim();if(y)return y}return ""}
+function zhSupport(s){const m=String(s||"").match(/(?:中文理解|中文解释|中文辅助理解)[：:]\*{0,2}\s*(.+)/);return m?m[1].replace(/\*\*/g,"").trim():""}
+function splitTerm(s){const m=String(s||"").match(/^(.+?)\s+([\u3400-\u9fff].*)$/);return m?{en:m[1].trim(),zh:m[2].trim()}:{en:s,zh:""}}
+function value(body,re){const m=String(body||"").match(re);return m?m[1].trim().replace(/^["“]|["”]$/g,""):""}
+function vocab(md){
+ const sec=findSec(sections(md),/^(ux )?english(?:\s|$)/);if(!sec)return {cards:[],phrases:[]};
+ const terms=[...sec.body.matchAll(/^###\s+\d+[.)]?\s+(.+)$/gm)];
+ const cards=terms.map((m,i)=>{const start=m.index+m[0].length,end=terms[i+1]?terms[i+1].index:sec.body.length,b=sec.body.slice(start,end),t=splitTerm(m[1]);
+  const d=value(b,/^\s*-?\s*\*\*(?:English definition|Definition):\*\*\s*(.+)$/mi)||value(b,/^\s*(?:English definition|Definition):\s*(.+)$/mi);
+  const z=value(b,/^\s*-?\s*\*\*中文(?:解释|理解)：\*\*\s*(.+)$/mi)||value(b,/^\s*(?:中文解释|中文理解)：\s*(.+)$/mi);
+  const ex=value(b,/^\s*-?\s*\*\*(?:UX-context example|UX example):\*\*\s*(.+)$/mi)||value(b,/^\s*(?:UX-context example|UX example):\s*(.+)$/mi);
+  const tr=value(b,/^\s*(?:中文辅助理解|例句理解)：\s*(.+)$/mi)||value(b,/^\s*-?\s*\*\*中文辅助理解：\*\*\s*(.+)$/mi);
+  return '<article class="vocab-card"><div class="vocab-title"><span class="vocab-index">'+String(i+1).padStart(2,"0")+'</span><h3>'+safe(t.en)+'</h3><span class="vocab-term-zh">'+safe(t.zh)+'</span></div><div class="vocab-field"><b>ENGLISH DEFINITION</b><p class="vocab-def">'+safe(d)+'</p></div><div class="vocab-field vocab-support"><b>中文理解</b><p class="vocab-zh">'+safe(z)+'</p></div><div class="vocab-example"><b>UX CONTEXT EXAMPLE</b><p>“'+safe(ex)+'”</p><small class="vocab-translation">中文例句理解｜'+safe(tr)+'</small></div></article>'
+ });
+ let phrases=[];const pm=sec.body.match(/^###\s+Phrases to remember[^\n]*\n([\s\S]*)/mi);if(pm){const body=pm[1].split(/^###\s+/m)[0];for(const m of body.matchAll(/^\s*-\s*\*\*["“]([^"”]+)["”]\*\*\s*[—–-]\s*(.+)$/gm)){const tail=body.slice(m.index+m[0].length),tr=tail.match(/^\s*(?:中文理解|中文辅助理解)[：:]\s*(.+)$/m);phrases.push('<div class="phrase-item"><span class="phrase-icon">“</span><div><b>'+safe(m[1])+'</b><p>'+safe(m[2])+'</p><small>'+safe(tr?tr[1]:"")+'</small></div></div>')}}
+ return {cards,phrases}
+}
+function dayWeek(d){return Math.floor((d-1)/7)+1}
+function normCourse(x){const d=Number(x.day),p=typeof x.content_path==="string"?x.content_path.trim():"",s=String(x.generation_status||x.status||"").toLowerCase();return {...x,day:d,week:dayWeek(d),path:p,available:!!p&&(["existing","available","active","completed"].includes(s)||x.generation_status==="generated"),title:String(x.title||("Day "+String(d).padStart(2,"0"))),topic:String(x.topic||x.title||""),scheduled_date:String(x.scheduled_date||"")}}
+function flatten(m){if(!m||!Array.isArray(m.weeks))throw Error("Unsupported manifest schema");const a=m.weeks.flatMap(w=>Array.isArray(w.days)?w.days:[]).map(normCourse).filter(x=>Number.isInteger(x.day)&&x.day>0).sort((x,y)=>x.day-y.day),seen=new Set();for(const x of a){if(seen.has(x.day))throw Error("Duplicate Day "+x.day+" in manifest");seen.add(x.day);if(x.path&&(x.path.startsWith("/")||x.path.split("/").includes("..")))throw Error("Unsafe Markdown path in manifest")}return a}
+function cnDate(){const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),o=Object.fromEntries(p.map(x=>[x.type,x.value]));return o.year+"-"+o.month+"-"+o.day}
+function dayLabel(c){return "DAY "+String(c.day).padStart(2,"0")}
+function englishTopic(c){const t=(c.topic||c.title).replace(/^Day\s*\d+\s*[｜|:：-]\s*/i,"").trim(),m=t.match(/[A-Za-z][A-Za-z0-9 /&×-]*/);return (m?m[0]:t).trim()}
+function chineseTopic(c){const t=(c.title+" "+c.topic).replace(/^Day\s*\d+\s*[｜|:：-]\s*/i,""),m=t.match(/[\u3400-\u9fff][\u3400-\u9fff\s·、（）()]*/);return m?m[0].trim():""}
+function key(d){return "uxdl-day-"+String(d).padStart(2,"0")+"-modules-v3"}
+function readState(c){const s=blank();if(!c)return s;try{let x=JSON.parse(localStorage.getItem(key(c.day))||"null");if(!x&&c.day===1){x=JSON.parse(localStorage.getItem("uxdl-day01-modules-v2")||"null")||JSON.parse(localStorage.getItem("uxdl-day01-status")||"null")||JSON.parse(localStorage.getItem("uxd1-day01-status")||"null");if(x){s.learn=x.learn===true||x.learning===true;s.english=x.english===true;s.challenge=x.challenge===true;s.practice=x.practice===true;s.review=x.review===true;s.reflection=typeof x.reflection==="string"?x.reflection:"";localStorage.setItem(key(c.day),JSON.stringify(s));return s}}if(x&&typeof x==="object")return {learn:x.learn===true||x.learning===true,english:x.english===true,challenge:x.challenge===true,practice:x.practice===true,review:x.review===true,reflection:typeof x.reflection==="string"?x.reflection:""}}catch(_){}return s}
+function isDone(c){return MODULES.every(k=>readState(c)[k]===true)}
+function buildNav(){
+ const nav=el("weekNav"),groups=new Map();courses.forEach(c=>{if(!groups.has(c.week))groups.set(c.week,[]);groups.get(c.week).push(c)});
+ nav.innerHTML=[...groups.entries()].map(([week,items])=>{const done=items.filter(c=>c.available&&isDone(c)).length,active=items.filter(c=>current&&c.available&&current.day===c.day&&!isDone(c)).length,up=items.filter(c=>!c.available).length;
+  const rows=items.map(c=>{const selected=current&&current.day===c.day&&c.available,complete=c.available&&isDone(c),label=englishTopic(c),zh=chineseTopic(c),inner='<span class="day-num">'+String(c.day).padStart(2,"0")+'</span><span class="day-title">'+safe(label)+(zh?'<small>'+safe(zh)+'</small>':"")+'</span><span class="day-status" title="'+(complete?"Completed":selected?"Active":c.available?"Available":"Upcoming")+'">'+(complete?'<span class="day-check-mark">✓</span>':selected?'<span class="day-status-dot"></span>':c.available?'<span class="day-available-mark">•</span>':'<span class="day-upcoming-mark">·</span>')+'</span>';
+   return c.available?'<a class="day-link'+(selected?" active":"")+(complete?" completed":"")+'" href="#top" data-course-day="'+c.day+'"'+(selected?' aria-current="page"':"")+'>'+inner+'</a>':'<button class="day-link upcoming" type="button" data-upcoming-day="'+c.day+'">'+inner+'</button>'
+  }).join("");
+  return '<div class="week-group"><div class="week-note">WEEK '+String(week).padStart(2,"0")+' <span>'+done+' completed · '+active+' active · '+up+' upcoming</span></div>'+rows+'</div>'
+ }).join("");
+ nav.querySelectorAll("[data-course-day]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();const c=courses.find(x=>x.day===Number(a.dataset.courseDay));if(c)selectCourse(c);closeNav();window.scrollTo({top:0,behavior:"smooth"})}));
+ nav.querySelectorAll("[data-upcoming-day]").forEach(b=>b.addEventListener("click",()=>showUpcoming(Number(b.dataset.upcomingDay))))
+}
+function closeNav(){const rail=document.querySelector(".rail"),toggle=el("menuToggle");if(rail)rail.classList.remove("open");if(toggle)toggle.setAttribute("aria-expanded","false")}
+function showUpcoming(d){const c=courses.find(x=>x.day===d);if(!c)return;el("dialogDay").textContent=dayLabel(c);el("upcomingTitle").textContent=englishTopic(c)||c.title;el("dialogChinese").textContent=chineseTopic(c);el("dialogStatus").textContent="UPCOMING · NOT AVAILABLE YET";el("dialogCopy").textContent=c.scheduled_date?"This lesson is planned for "+c.scheduled_date+". The Markdown course is not available yet.":"This lesson appears in the Project plan, but its Markdown course is not available yet.";const dlg=el("upcomingDialog");if(dlg&&dlg.showModal)dlg.showModal()}
+function mdUrl(path){return "./"+path.split("/").map(encodeURIComponent).join("/")}
+function set(id,v){const n=el(id);if(n&&v)n.textContent=v}
+function render(course,md){
+ const headingLine=String(md).match(/^#\s+(.*)$/m),markdownTitle=headingLine?headingLine[1].trim():"";if(/^Day\s*\d+/i.test(markdownTitle)){course.markdownTitle=markdownTitle;course.title=markdownTitle;course.topic=markdownTitle.replace(/^Day\s*\d+\s*[｜|:：-]\s*/i,"").trim()}const ss=sections(md),c=getContent(md,ss),learnSec=findSec(ss,/^learn(?:\s|$)/),learn=learnSec?learnSec.body:c.learn,lead=txtFirst(learn)||"Explore today’s UX idea, then put it into practice.",zh=zhSupport(learn),topic=englishTopic(course)||course.title,day=dayLabel(course),week=dayWeek(course.day);
+ current=course;state=readState(course);set("heroDay",day);set("heroTopic",topic.toUpperCase());set("pageTitle",topic);set("heroLead",lead);set("heroLeadZh",zh||"跟随课程内容，用中文辅助理解今天的 UX 核心知识。");set("heroNote",lead.slice(0,84));set("dayProgressLabel",day+" PROGRESS");set("breadcrumbWeek","WEEK "+String(week).padStart(2,"0"));set("breadcrumbDay",day);set("profileWeek","Week "+String(week).padStart(2,"0")+" · Beginner");document.title="UX Daily Lab — "+topic;
+ const intro=el("learnIntro");if(intro)intro.innerHTML=safe(lead)+"<br><span>"+safe(zh||"学习今天的 UX 核心知识。")+"</span>";
+ el("learnContent").innerHTML=renderLearn(c.learn,ss);el("researchSource").innerHTML=renderMd(c.learn);
+ const v=vocab(md);el("vocabContent").innerHTML=v.cards.join("")||'<p class="inline-notice">UX English vocabulary is not available yet.｜本课程暂未提供 UX English 词汇。</p>';el("phraseContent").innerHTML=v.phrases.join("");
+ const area=el("challengeContent"),crit=c.challenge.match(/^#{2,4}\s+(?:Completion Criteria|Completion Checklist|Success Criteria|Definition of Done)[^\n]*\n([\s\S]*?)(?=^#{2,4}\s|(?![\s\S]))/mi),criteria=crit?crit[1].trim():"",challengeBody=c.challenge.replace(/^#{2,4}\s+(?:Completion Criteria|Completion Checklist|Success Criteria|Definition of Done)[^\n]*\n[\s\S]*?(?=^#{2,4}\s|(?![\s\S]))/mi,"").trim(),duration=c.challenge.match(/\b(?:\d+\s*[-–]\s*\d+\s*minutes?|\d+\s*[-–]\s*minutes?|\d+\s*minutes?)\b/i);
+ const fallback=c.legacy?'<p class="inline-notice">This legacy lesson has no separate Challenge section. Its completion checklist and suggested session are shown here.｜旧版课程没有独立的 Challenge 章节；此处展示原文件中的完成清单与学习安排。</p>':"";
+ area.innerHTML='<div class="challenge-main"><div class="challenge-label">TODAY’S TASK｜今日任务</div>'+fallback+'<div class="markdown-content challenge-render">'+(challengeBody?renderMd(challengeBody):'<p class="inline-notice">Challenge details are not available yet.｜本课程暂未提供挑战说明。</p>')+'</div><button class="module-complete-button" type="button" data-complete-module="challenge" aria-pressed="false"><span class="module-check"></span><span class="module-label">Mark Challenge Complete</span></button></div><aside class="criteria-card"><div class="criteria-head"><span>✓</span><div><b>Completion Criteria</b><small>完成标准</small></div></div><div class="markdown-content criteria-render">'+(criteria?renderMd(criteria):'<p class="inline-notice">Use the steps and checklist in today’s lesson.｜请依据本课中的步骤与清单完成练习。</p>')+'</div></aside>';
+ set("challengeTime",duration?duration[0]+" · from the course":"Details from today’s course");el("practiceContent").innerHTML=renderMd(c.practice||md);set("practiceFilename",course.path.split("/").pop());set("practiceSourceLabel","Markdown course · "+day);
+ const rvIntro=el("reviewIntro");if(rvIntro)rvIntro.innerHTML=c.review?(safe(txtFirst(c.review)||"Pause and reflect on today’s learning.")+(zhSupport(c.review)?"<br><span>"+safe(zhSupport(c.review))+"</span>":"")):"A small reflection helps knowledge stick.<br><span>用简短复盘巩固今天的学习。</span>";const rv=el("reviewPrompt");rv.innerHTML=c.review?renderMd(c.review):'<p class="inline-notice">This legacy course does not include a Review section. Use the reflection field to record one takeaway.｜这份旧版课程没有独立的 Review 章节，可在下方记录一条学习收获。</p>';
+ const prompt=c.review.match(/(?:^|\n)\s*(?:Reflection question|Reflection prompt)?\s*[:：]?\s*["“]?([^。\n?]+[?？])/i),question=prompt?prompt[1].replace(/["”]/g,"").trim():"";set("reviewPromptTitle",question?"Reflection prompt":"One question to take with you");
+ sync();
+}
+function sync(){
+ document.querySelectorAll("[data-complete-module]").forEach(b=>{const k=b.dataset.completeModule,done=state[k]===true;b.classList.toggle("is-done",done);b.setAttribute("aria-pressed",String(done));const label=b.querySelector(".module-label,.state-text");if(label)label.textContent=done?LABELS[k]+" Completed":k==="review"?"Complete Review":"Mark "+LABELS[k]+" Complete";const check=b.querySelector(".module-check,.check");if(check)check.innerHTML=done?'<svg width="12" height="12" class="ui-icon" viewBox="0 0 18 18" aria-hidden="true"><path d="m3.5 9.2 3.4 3.4 7.6-7.5"/></svg>':'<svg width="12" height="12" class="ui-icon" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/></svg>'});
+ const n=MODULES.filter(k=>state[k]).length;set("progressPercent",n*20+"%");el("progressBar").style.width=n*20+"%";set("progressCopy",n+" of 5 modules complete");const w=current?dayWeek(current.day):0,items=courses.filter(c=>c.week===w&&c.available);set("weeklyProgressCopy",items.filter(isDone).length+" / "+items.length+" lessons complete");const input=el("reflectionInput");if(input&&input.value!==state.reflection)input.value=state.reflection;const saved=el("reflectionSaved");if(saved)saved.textContent=state.reflection?"Saved in this browser · 已保存到当前浏览器":"Saved in this browser · 保存在当前浏览器";buildNav()
+}
+function save(){if(!current)return;try{localStorage.setItem(key(current.day),JSON.stringify(state))}catch(_){}sync()}
+function showLoadError(message){const s=el("courseStatus");s.hidden=false;s.classList.add("is-error");s.textContent=message;el("learnContent").innerHTML='<p class="inline-notice">'+safe(message)+'</p>';el("vocabContent").innerHTML='<p class="inline-notice">'+safe(message)+'</p>';el("challengeContent").innerHTML='<div class="inline-notice">'+safe(message)+'</div>';el("practiceContent").innerHTML='<p class="inline-notice">'+safe(message)+'</p>'}
+async function selectCourse(c){current=c;const s=el("courseStatus");s.hidden=false;s.classList.remove("is-error");s.textContent="Loading course…";buildNav();try{const r=await fetch(mdUrl(c.path),{cache:"no-cache"});if(!r.ok)throw Error();render(c,await r.text());s.hidden=true}catch(_){showLoadError("Unable to load course｜课程暂时无法加载，请稍后重试。")}}
+function noCourse(){current=null;state=blank();buildNav();const s=el("courseStatus");s.hidden=false;s.classList.remove("is-error");s.textContent=courses.length?"Course not generated yet｜今日课程尚未生成。可从 Learning Path 选择已生成课程。":"Course not generated yet｜课程索引中还没有已生成课程。";["learnContent","vocabContent","practiceContent"].forEach(id=>el(id).innerHTML='<p class="inline-notice">Course not generated yet｜课程尚未生成。</p>');el("challengeContent").innerHTML='<div class="inline-notice">Course not generated yet｜课程尚未生成。</div>';el("phraseContent").innerHTML="";sync()}
+function initial(){const ready=courses.filter(c=>c.available);if(!ready.length)return null;const today=cnDate(),same=ready.find(c=>c.scheduled_date===today);if(same)return same;const past=ready.filter(c=>c.scheduled_date&&c.scheduled_date<=today).sort((a,b)=>b.scheduled_date.localeCompare(a.scheduled_date)||b.day-a.day);return past[0]||ready.slice().sort((a,b)=>b.day-a.day)[0]}
 
-  const escapeHtml = (value) => value.replace(/[&<>\"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
-  const inline = (value) => escapeHtml(value)
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
-
-  function renderMarkdown(markdown) {
-    const lines = markdown.replace(/\r/g, "").split("\n");
-    let html = "", list = "", quote = false, table = false;
-    const closeList = () => { if (list) { html += `</${list}>`; list = ""; } };
-    const closeQuote = () => { if (quote) { html += "</blockquote>"; quote = false; } };
-    const closeTable = () => { if (table) { html += "</tbody></table>"; table = false; } };
-    for (const raw of lines) {
-      const line = raw.trim();
-      if (!line) { closeList(); closeQuote(); closeTable(); continue; }
-      if (/^\|.*\|$/.test(line)) {
-        closeList(); closeQuote();
-        const cells = line.slice(1, -1).split("|").map((cell) => cell.trim());
-        if (cells.every((cell) => /^:?-{3,}:?$/.test(cell))) continue;
-        if (!table) {
-          html += `<table><thead><tr>${cells.map((cell) => `<th>${inline(cell)}</th>`).join("")}</tr></thead><tbody>`;
-          table = true;
-        } else {
-          html += `<tr>${cells.map((cell) => `<td>${inline(cell)}</td>`).join("")}</tr>`;
-        }
-        continue;
-      }
-      closeTable();
-      if (/^#{1,4}\s/.test(line)) {
-        closeList(); closeQuote();
-        const match = line.match(/^(#{1,4})\s+(.*)$/);
-        const level = match[1].length;
-        html += `<h${level}>${inline(match[2])}</h${level}>`;
-        continue;
-      }
-      if (/^---+$/.test(line)) { closeList(); closeQuote(); html += "<hr>"; continue; }
-      if (/^>\s?/.test(line)) {
-        closeList();
-        if (!quote) { html += "<blockquote>"; quote = true; }
-        html += `<p>${inline(line.replace(/^>\s?/, ""))}</p>`;
-        continue;
-      }
-      closeQuote();
-      const unordered = line.match(/^[-*]\s+(.*)$/);
-      const ordered = line.match(/^\d+\.\s+(.*)$/);
-      if (unordered || ordered) {
-        const kind = unordered ? "ul" : "ol";
-        if (list !== kind) { closeList(); html += `<${kind}>`; list = kind; }
-        html += `<li>${inline((unordered || ordered)[1])}</li>`;
-        continue;
-      }
-      closeList();
-      html += `<p>${inline(line)}</p>`;
-    }
-    closeList(); closeQuote(); closeTable();
-    return html;
-  }
-
-  function extractSection(markdown, heading) {
-    const lines = markdown.split("\n");
-    const start = lines.findIndex((line) => line.trim() === heading);
-    if (start < 0) return "";
-    let end = start + 1;
-    while (end < lines.length && !/^##\s/.test(lines[end])) end++;
-    return lines.slice(start + 1, end).join("\n").trim();
-  }
-
-  function parseVocab(markdown) {
-    const section = extractSection(markdown, "## UX English Learning｜UX 专业英语学习");
-    const terms = [...section.matchAll(/^###\s+\d+\.\s+(.+)$/gm)];
-    return terms.map((term, index) => {
-      const start = term.index + term[0].length;
-      const end = terms[index + 1]?.index ?? section.length;
-      const body = section.slice(start, end);
-      const field = (pattern) => body.match(pattern)?.[1]?.trim() || "";
-      const english = field(/^- \*\*Definition:\*\*\s*(.+)$/m);
-      const chinese = field(/^\s*中文解释：(.+)$/m);
-      const example = field(/^- \*\*UX example:\*\*\s*“?(.+?)”?\s*$/m);
-      const translation = field(/^\s*例句理解：(.+)$/m);
-      const title = term[1].trim();
-      const split = title.lastIndexOf(" ");
-      const englishTerm = split > 0 ? title.slice(0, split) : title;
-      const chineseTerm = split > 0 ? title.slice(split + 1) : "";
-      return `<article class="vocab-card"><div class="vocab-title"><span class="vocab-index">0${index + 1}</span><h3>${escapeHtml(englishTerm)}</h3><span class="vocab-term-zh">${escapeHtml(chineseTerm)}</span></div><div class="vocab-field"><b>ENGLISH DEFINITION</b><p class="vocab-def">${escapeHtml(english)}</p></div><div class="vocab-field vocab-support"><b>中文理解</b><p class="vocab-zh">${escapeHtml(chinese)}</p></div><div class="vocab-example"><b>UX CONTEXT EXAMPLE</b><p>“${escapeHtml(example.replace(/^“|”$/g, ""))}”</p><small>中文例句理解｜${escapeHtml(translation)}</small></div></article>`;
-    }).join("");
-  }
-
-  function renderPhrases(markdown) {
-    const section = extractSection(markdown, "### Phrases to remember｜值得记忆的表达");
-    const phrases = [...section.matchAll(/^- \*\*“([^”]+)”\*\* — (.+)$/gm)];
-    return phrases.map((phrase) => {
-      const nextLine = section.slice(phrase.index + phrase[0].length).match(/^\s*中文理解：(.+)$/m)?.[1] || "";
-      return `<div class="phrase-item"><span class="phrase-icon">“</span><div><b>${escapeHtml(phrase[1])}</b><p>${escapeHtml(phrase[2])}</p><small>${escapeHtml(nextLine)}</small></div></div>`;
-    }).join("");
-  }
-
-  const toast = document.getElementById("toast");
-  const MODULES = ["learn", "english", "challenge", "practice", "review"];
-  const MODULE_LABELS = { learn: "Learn", english: "English", challenge: "Challenge", practice: "Practice", review: "Review" };
-  const STATUS_KEY = "uxdl-day01-modules-v2";
-  let status = { learn: false, english: false, challenge: false, practice: false, review: false, reflection: "" };
-  try {
-    let saved = JSON.parse(localStorage.getItem(STATUS_KEY) || "null");
-    let migrated = false;
-    if (!saved) {
-      saved = JSON.parse(localStorage.getItem("uxdl-day01-status") || "null")
-        || JSON.parse(localStorage.getItem("uxd1-day01-status") || "null");
-      migrated = Boolean(saved);
-    }
-    if (saved && typeof saved === "object") {
-      status = {
-        learn: saved.learn === true || (!MODULES.some((key) => Object.hasOwn(saved, key)) && saved.learning === true),
-        english: saved.english === true,
-        challenge: saved.challenge === true,
-        practice: saved.practice === true,
-        review: saved.review === true,
-        reflection: typeof saved.reflection === "string" ? saved.reflection : ""
-      };
-    }
-    if (migrated) localStorage.setItem(STATUS_KEY, JSON.stringify(status));
-  } catch (_) { /* Keep the page usable if local browser storage is unavailable. */ }
-  let toastTimer;
-  function notify(message) {
-    toast.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
-  }
-  function syncStatus() {
-    document.querySelectorAll("[data-complete-module]").forEach((button) => {
-      const key = button.dataset.completeModule;
-      const complete = status[key] === true;
-      button.classList.toggle("is-done", complete);
-      button.setAttribute("aria-pressed", String(complete));
-      const label = button.querySelector(".module-label, .state-text");
-      if (label) label.textContent = complete ? `${MODULE_LABELS[key]} Completed` : key === "review" ? "Complete Review" : `Mark ${MODULE_LABELS[key]} Complete`;
-      const check = button.querySelector(".module-check, .check");
-      if (check) check.innerHTML = complete ? icons.check : icons.circle;
-    });
-    const completed = MODULES.filter((key) => status[key]).length;
-    const dayComplete = completed === MODULES.length;
-    const percent = completed * 20;
-    document.getElementById("progressPercent").textContent = `${percent}%`;
-    document.getElementById("progressBar").style.width = `${percent}%`;
-    document.getElementById("progressCopy").textContent = `${completed} of 5 Day 01 modules complete`;
-    document.getElementById("weeklyProgressCopy").textContent = `${dayComplete ? 1 : 0} / 7 days complete`;
-    document.getElementById("weekNavSummary").textContent = dayComplete ? "1 completed · 6 upcoming" : "0 completed · 1 active · 6 upcoming";
-    const dayOneLink = nav.querySelector('[data-day-index="0"]');
-    dayOneLink.querySelector(".day-status").innerHTML = dayComplete ? icons.dayCheck : icons.dayDot;
-    dayOneLink.querySelector(".day-status").title = dayComplete ? "Completed" : "Active";
-    dayOneLink.classList.toggle("completed", dayComplete);
-    document.getElementById("reflectionInput").value = status.reflection;
-    document.getElementById("reflectionSaved").textContent = status.reflection ? "Saved in this browser · 已保存到当前浏览器" : "Saved in this browser · 保存在当前浏览器";
-  }
-  function saveStatus() {
-    try { localStorage.setItem(STATUS_KEY, JSON.stringify(status)); } catch (_) { /* Keep in-memory progress for this visit. */ }
-    syncStatus();
-  }
-  document.querySelectorAll("[data-complete-module]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const key = button.dataset.completeModule;
-      status[key] = !status[key];
-      saveStatus();
-      notify(`${MODULE_LABELS[key]} ${status[key] ? "completed" : "marked incomplete"}`);
-    });
-  });
-  document.getElementById("reflectionInput").addEventListener("input", (event) => {
-    status.reflection = event.target.value;
-    saveStatus();
-  });
-  syncStatus();
-
-  const upcomingDialog = document.getElementById("upcomingDialog");
-  document.getElementById("dialogOk").addEventListener("click", () => upcomingDialog.close());
-  nav.querySelectorAll("[data-day-index]").forEach((link) => link.addEventListener("click", (event) => {
-    const index = Number(link.dataset.dayIndex);
-    if (index === 0) { closeNavigation(); return; }
-    event.preventDefault();
-    const day = days[index];
-    document.getElementById("dialogDay").textContent = `DAY ${day[0]}`;
-    document.getElementById("upcomingTitle").textContent = day[1];
-    document.getElementById("dialogChinese").textContent = day[2];
-    document.getElementById("dialogStatus").textContent = `${day[3].toUpperCase()} · NOT AVAILABLE YET`;
-    document.getElementById("dialogCopy").textContent = `This lesson will be generated by the AI Planner on its scheduled learning date. ${day[1]} content is not available yet.`;
-    upcomingDialog.showModal();
-  }));
-
-  const rail = document.querySelector(".rail");
-  const menuToggle = document.getElementById("menuToggle");
-  const closeNavigation = () => {
-    rail.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-  };
-  menuToggle.addEventListener("click", () => {
-    const isOpen = rail.classList.toggle("open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-  });
-  document.addEventListener("click", (event) => {
-    if (rail.classList.contains("open") && !rail.contains(event.target) && !menuToggle.contains(event.target)) closeNavigation();
-  });
-  const sectionLinks = [...document.querySelectorAll(".section-nav a")];
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      if (entry.isIntersecting) sectionLinks.forEach((link) => link.classList.toggle("active", link.hash === `#${entry.target.id}`));
-    }), { rootMargin: "-25% 0px -65% 0px" });
-    document.querySelectorAll(".lesson-section").forEach((section) => observer.observe(section));
-  }
-  document.querySelectorAll("a[href^='#']").forEach((link) => link.addEventListener("click", closeNavigation));
-
-  fetch(sourceUrl).then((response) => {
-    if (!response.ok) throw new Error("Day 01 source unavailable");
-    return response.text();
-  }).then((markdown) => {
-    const goal = extractSection(markdown, "## Research Goal｜研究目标");
-    const method = extractSection(markdown, "## Research Method｜研究方法");
-    const target = extractSection(markdown, "## Target User｜目标用户");
-    document.getElementById("researchSource").innerHTML = renderMarkdown(["## Research Goal｜研究目标", goal, "## Research Method｜研究方法", method, "## Target User｜目标用户", target].join("\n\n"));
-    const vocab = parseVocab(markdown);
-    document.getElementById("vocabContent").innerHTML = vocab || '<p class="inline-notice">The vocabulary section is not available in the Day 01 lesson file.</p>';
-    document.getElementById("phraseContent").innerHTML = renderPhrases(markdown);
-    document.getElementById("practiceContent").innerHTML = renderMarkdown(markdown);
-  }).catch(() => {
-    const message = '<p class="inline-notice">The Day 01 lesson file could not be loaded. Check that the local preview is served from the project folder.</p>';
-    document.getElementById("researchSource").innerHTML = message;
-    document.getElementById("practiceContent").innerHTML = message;
-    document.getElementById("vocabContent").innerHTML = message;
-  });
+async function init(){const s=el("courseStatus");try{const r=await fetch("./content/manifest.json",{cache:"no-cache"});if(!r.ok)throw Error();courses=flatten(await r.json());try{const p=await fetch("./config/learning-plan.json",{cache:"no-cache"});if(p.ok){const plan=await p.json(),items=(plan.weeks||[]).flatMap(w=>Array.isArray(w.days)?w.days:[]);courses=courses.map(c=>{const source=items.find(x=>x.project_item_id&&x.project_item_id===c.project_item_id)||items.find(x=>Number(x.day)===c.day);return source?{...c,scheduled_date:c.scheduled_date||String(source.scheduled_date||""),project_status:c.project_status||source.status}:c})}}catch(_){}buildNav();const c=initial();if(c)await selectCourse(c);else noCourse()}catch(_){showLoadError("Unable to load course｜无法读取课程索引或 Markdown 文件。")}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-complete-module]");if(!b||!current)return;const k=b.dataset.completeModule;state[k]=!state[k];save();const t=el("toast");t.textContent=LABELS[k]+(state[k]?" completed":" marked incomplete");t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2300)});
+el("reflectionInput").addEventListener("input",e=>{state.reflection=e.target.value;save()});
+el("dialogOk").addEventListener("click",()=>el("upcomingDialog").close());
+const rail=document.querySelector(".rail"),toggle=el("menuToggle");toggle.addEventListener("click",()=>{const open=rail.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))});document.addEventListener("click",e=>{if(rail.classList.contains("open")&&!rail.contains(e.target)&&!toggle.contains(e.target))closeNav()});document.querySelectorAll("a[href^='#']").forEach(a=>a.addEventListener("click",closeNav));
+const links=[...document.querySelectorAll(".section-nav a")];if("IntersectionObserver"in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)links.forEach(a=>a.classList.toggle("active",a.hash==="#"+entry.target.id))}),{rootMargin:"-25% 0px -65% 0px"});document.querySelectorAll(".lesson-section").forEach(s=>observer.observe(s))}
+init();
 })();
-

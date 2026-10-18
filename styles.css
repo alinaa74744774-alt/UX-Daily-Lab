@@ -336,3 +336,55 @@
     text-size-adjust:87.5%;
   }
 }
+
+
+/* Data-driven course rendering: preserve the existing product surfaces while allowing any Day. */
+.course-status{margin:0 0 14px;padding:10px 14px;border:1px solid #dfe9e1;border-radius:12px;background:#fff;color:#607268;font-size:10px;line-height:1.5}
+.course-status[hidden]{display:none}
+.course-status.is-error{border-color:#efd9d5;background:#fff8f6;color:#9a5349}
+.week-nav{min-height:0;max-height:calc(100vh - 190px);overflow-y:auto;align-content:start;padding-right:2px}
+.week-group{display:grid;gap:6px}
+.week-note{margin:13px 8px 3px;padding:8px 3px 2px;border-top:1px solid #edf0ed;color:#9aa39e;font-size:8px;font-weight:700;letter-spacing:1px}
+.week-note:first-child{margin-top:0;border-top:0}
+.week-note span{display:block;margin-top:4px;color:#87928b;font-size:8px;font-weight:500;letter-spacing:0}
+button.day-link{width:100%;font-family:inherit;text-align:left;background:transparent;border:0;cursor:pointer}
+button.day-link.upcoming{color:#78817d}
+button.day-link.upcoming:hover{background:#f5f7f5}
+.day-check-mark,.day-available-mark,.day-upcoming-mark{font-size:14px;line-height:1;color:#9aa49d}
+.day-link.completed .day-status,.day-link.completed .day-check-mark{color:#39855e}
+.learning-sequence.dynamic-learning{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:13px;align-items:stretch}
+.dynamic-lesson-card{grid-column:auto!important;min-width:0;min-height:0!important;padding:20px 21px 24px}
+.dynamic-lesson-card h3{position:relative;z-index:1;overflow-wrap:anywhere}
+.dynamic-card-copy{position:relative;z-index:1;max-width:100%;font-size:10px}
+.dynamic-card-copy h2,.dynamic-card-copy h3,.dynamic-card-copy h4{font-size:12px;margin:10px 0 5px}
+.dynamic-card-copy p{max-width:none}
+.dynamic-card-copy ul,.dynamic-card-copy ol{padding-left:17px}
+.dynamic-lesson-card .card-kicker,.dynamic-lesson-card .concept-number{position:relative;z-index:1}
+.dynamic-lesson-card .dynamic-card-copy{color:inherit}
+.dynamic-lesson-card.concept-feature .dynamic-card-copy{color:#d7e3db}
+.dynamic-lesson-card.concept-feature .dynamic-card-copy strong{color:#f7fbf8}
+.dynamic-lesson-card.concept-feature .dynamic-card-copy blockquote{background:#263a30;color:#d7e3db}
+.challenge-render{margin-top:12px}
+.challenge-render h1,.challenge-render h2{font-size:15px}
+.challenge-render h3{font-size:12px}
+.challenge-render p{max-width:unset}
+.challenge-render table,.criteria-render table{display:block;max-width:100%;overflow-x:auto}
+.criteria-render{padding-top:10px;font-size:9px}
+.criteria-render ul,.criteria-render ol{padding-left:16px}
+.criteria-render li{margin:5px 0}
+.challenge-layout .module-complete-button{margin-top:15px}
+.vocab-field> b,.vocab-example>b{font-size:7px;letter-spacing:.8px;color:#8b9890}
+.vocab-field{margin-top:10px}
+.vocab-field p{overflow-wrap:anywhere}
+.vocab-example p{margin:5px 0 0;overflow-wrap:anywhere}
+.vocab-translation{display:block;font-style:normal;line-height:1.5}
+.practice-meta b{overflow-wrap:anywhere}
+#reviewPrompt{margin-top:6px}
+.inline-notice{margin:10px 0;padding:11px 13px;border:1px solid #e8ede9;border-radius:11px;background:#fbfcfb;color:#77837b;font-size:10px;line-height:1.6}
+.loading{padding:4px 0}
+@media(max-width:700px){
+  .week-nav{max-height:calc(100dvh - 190px);max-height:calc(100vh - 190px)}
+  .learning-sequence.dynamic-learning{grid-template-columns:1fr}
+  .dynamic-lesson-card{padding:18px}
+  .course-status{font-size:10px}
+}
