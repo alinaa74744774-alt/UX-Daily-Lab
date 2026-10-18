@@ -2,6 +2,10 @@ name: Daily Course Generator
 
 on:
   workflow_dispatch:
+  schedule:
+    # 23:00 UTC on the previous calendar day is 07:00 the next day in Asia/Shanghai (UTC+8).
+    # This cron only starts the workflow; Project scheduled_date determines the day's course.
+    - cron: "0 23 * * *"
 
 permissions:
   contents: write
