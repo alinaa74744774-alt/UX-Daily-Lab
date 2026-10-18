@@ -25,7 +25,7 @@ TIMEZONE = "Asia/Shanghai"
 COURSE_PATH_TEMPLATE = "content/courses/week-{week:02d}/day-{day:02d}.md"
 LEGACY_DAY_ONE_PATH = "Day01_User_Research_Interview_Plan.md"
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DAY_RE = re.compile(r"^\s*Day\s*0*(\d{1,3})\s*(?:[|｜:：—–-]\s*)?(.*?)\s*$", re.IGNORECASE)
+DAY_RE = re.compile(r"^\s*Day\s*0*(\d{1,3})(?:\s*[|｜:：—–-]\s*|\s+|$)(.*?)\s*$", re.IGNORECASE)
 
 PROJECTS_QUERY = """
 query($login: String!, $cursor: String) {
@@ -260,6 +260,7 @@ def normalize_item(item: dict[str, Any]) -> dict[str, Any]:
         "issue_number": issue_number,
         "generation_mode": generation_mode,
         "generation_enabled": False,
+        "generation_blocked": day is None or not scheduled_date,
         "content_path": existing_content_path,
         "output_path": output_path,
         "sync_warnings": warnings,
