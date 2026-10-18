@@ -1,0 +1,50 @@
+name: Project Sync
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: project-plan-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Sync Project plan and verify idempotency
+        env:
+          PROJECTS_READ_TOKEN: ${{ secrets.PROJECTS_READ_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          python .github/scripts/project_sync.py --output config/learning-plan.json
+          first_hash="$(sha256sum config/learning-plan.json | cut -d ' ' -f 1)"
+          python .github/scripts/project_sync.py --output config/learning-plan.json
+          second_hash="$(sha256sum config/learning-plan.json | cut -d ' ' -f 1)"
+          if [ "$first_hash" != "$second_hash" ]; then
+            echo "Idempotency check failed: the second sync changed learning-plan.json."
+            exit 1
+          fi
+          echo "Idempotency check passed: the second sync produced no file changes."
+
+      - name: Commit generated plan cache when changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- config/learning-plan.json; then
+            echo "learning-plan.json already matches the Project; no commit needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/learning-plan.json
+          git commit -m "Sync learning plan from GitHub Project"
+          git push
