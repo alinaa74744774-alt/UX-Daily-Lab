@@ -1,0 +1,44 @@
+name: Daily Course Generator
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-course-generator
+  cancel-in-progress: false
+
+jobs:
+  generate-todays-course:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Sync current Project plan
+        env:
+          PROJECTS_READ_TOKEN: ${{ secrets.PROJECTS_READ_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python .github/scripts/project_sync.py --output config/learning-plan.json
+
+      - name: Generate today's course when needed
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python .github/scripts/daily_generator.py
+
+      - name: Commit generated files when changed
+        run: |
+          set -euo pipefail
+          git add -A -- config/learning-plan.json content/manifest.json
+          find content -maxdepth 1 -type f -name 'day-*.md' -print0 | xargs -0 -r git add --
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Generate today's UX learning course"
+          git push
