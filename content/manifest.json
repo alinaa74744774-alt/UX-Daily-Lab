@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "weeks": [
+    {
+      "week": 1,
+      "title": "Week 01",
+      "days": [
+        {
+          "week": 1,
+          "day": 1,
+          "topic": "User Research",
+          "title": "Day 01｜用户研究 User Research",
+          "content_path": "Day01_User_Research_Interview_Plan.md",
+          "status": "existing",
+          "source_type": "legacy"
+        },
+        {
+          "week": 1,
+          "day": 2,
+          "topic": "User Persona",
+          "title": "Day 02｜用户画像 User Persona",
+          "content_path": null,
+          "status": "upcoming"
+        },
+        {
+          "week": 1,
+          "day": 3,
+          "topic": "Information Architecture",
+          "title": "Day 03｜信息架构 Information Architecture",
+          "content_path": null,
+          "status": "upcoming"
+        },
+        {
+          "week": 1,
+          "day": 4,
+          "topic": "User Flow",
+          "title": "Day 04｜用户流程 User Flow",
+          "content_path": null,
+          "status": "upcoming"
+        },
+        {
+          "week": 1,
+          "day": 5,
+          "topic": "UI Design",
+          "title": "Day 05｜界面设计 UI Design",
+          "content_path": null,
+          "status": "upcoming"
+        },
+        {
+          "week": 1,
+          "day": 6,
+          "topic": "Interactive Prototype",
+          "title": "Day 06｜交互原型 Interactive Prototype",
+          "content_path": null,
+          "status": "upcoming"
+        },
+        {
+          "week": 1,
+          "day": 7,
+          "topic": "Weekly Review",
+          "title": "Day 07｜每周复盘 Weekly Review",
+          "content_path": null,
+          "status": "upcoming"
+        }
+      ]
+    }
+  ]
+}
