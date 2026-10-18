@@ -35,8 +35,6 @@ jobs:
           echo "Idempotency check passed: the second sync produced no file changes."
 
       - name: Commit generated plan cache when changed
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           if git diff --quiet -- config/learning-plan.json; then
