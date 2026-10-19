@@ -5,14 +5,17 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 import os
+import random
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
-from urllib.parse import urlparse
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -39,6 +42,11 @@ VOCAB_FIELDS = (
     "**中文辅助理解：**",
 )
 VOCAB_ENTRY_RE = re.compile(r"^###\s+\d+\.\s+.+$", flags=re.MULTILINE)
+
+RETRYABLE_HTTP_STATUSES = frozenset({429, 500, 502, 503, 504})
+MAX_RETRIES = 4  # Five total requests: initial request plus four retries.
+BASE_RETRY_SECONDS = 30
+MAX_RETRY_SECONDS = 240
 
 
 class GeneratorError(RuntimeError):
@@ -170,6 +178,43 @@ Use Markdown only, preserve the section order, and do not add any other level-tw
 """
 
 
+def retry_after_seconds(error: urllib.error.HTTPError) -> int | None:
+    """Return a safe delay from Retry-After, accepting seconds or an HTTP date."""
+    if error.headers is None:
+        return None
+
+    value = error.headers.get("Retry-After")
+    if not value:
+        return None
+
+    try:
+        seconds = float(value.strip())
+        if math.isfinite(seconds):
+            return max(0, math.ceil(seconds))
+    except (OverflowError, ValueError):
+        pass
+
+    try:
+        retry_at = parsedate_to_datetime(value)
+        if retry_at.tzinfo is None:
+            retry_at = retry_at.replace(tzinfo=timezone.utc)
+        remaining = (retry_at - datetime.now(timezone.utc)).total_seconds()
+        return max(0, math.ceil(remaining))
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def retry_delay(error: urllib.error.HTTPError, retry_number: int) -> int:
+    """Prefer Google's Retry-After; otherwise use capped exponential backoff."""
+    server_delay = retry_after_seconds(error)
+    if server_delay is not None:
+        return server_delay
+
+    backoff = min(BASE_RETRY_SECONDS * (2 ** (retry_number - 1)), MAX_RETRY_SECONDS)
+    jitter = random.uniform(0, min(5, backoff * 0.1))
+    return math.ceil(backoff + jitter)
+
+
 def request_gemini(api_key: str, prompt: str) -> str:
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -184,21 +229,41 @@ def request_gemini(api_key: str, prompt: str) -> str:
             "Content-Type": "application/json",
         },
     )
-    try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as error:
+
+    result = None
+    for request_number in range(1, MAX_RETRIES + 2):
         try:
-            details = json.loads(error.read().decode("utf-8")).get("error", {})
-            message = details.get("message") or "Unknown Gemini API error."
-        except (UnicodeDecodeError, json.JSONDecodeError, AttributeError):
-            message = "No readable Gemini error message."
-        message = str(message).replace(api_key, "[REDACTED]")
-        message = " ".join(message.split())[:1000]
-        host = urlparse(GEMINI_API).netloc
-        raise GeneratorError(f"Gemini request to {host} failed with HTTP {error.code}: {message}") from None
-    except urllib.error.URLError:
-        raise GeneratorError("Gemini connection failed; request details were withheld.") from None
+            with urllib.request.urlopen(request, timeout=60) as response:
+                result = json.loads(response.read().decode("utf-8"))
+            break
+        except urllib.error.HTTPError as error:
+            status = error.code
+            if status not in RETRYABLE_HTTP_STATUSES:
+                error.close()
+                raise GeneratorError(
+                    f"Gemini request failed; HTTP status {status}."
+                ) from None
+
+            if request_number > MAX_RETRIES:
+                error.close()
+                raise GeneratorError(
+                    f"Gemini temporary error; HTTP status {status}; "
+                    f"Retry attempt {MAX_RETRIES}/{MAX_RETRIES}; retries exhausted."
+                ) from None
+
+            delay = retry_delay(error, request_number)
+            error.close()
+            print(
+                f"Gemini temporary error; HTTP status {status}; "
+                f"Retry attempt {request_number}/{MAX_RETRIES}; "
+                f"Waiting {delay} seconds",
+                flush=True,
+            )
+            time.sleep(delay)
+        except urllib.error.URLError:
+            raise GeneratorError(
+                "Gemini connection failed; request details were withheld."
+            ) from None
 
     try:
         text = "".join(
