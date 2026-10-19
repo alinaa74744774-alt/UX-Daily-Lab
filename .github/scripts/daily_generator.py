@@ -159,9 +159,10 @@ Write a useful, beginner-friendly UX × English learning course in Markdown. The
 # {item["title"]}
 
 Language approach:
-- English Primary with Chinese Learning Support, approximately 60% English and 40% concise Chinese support.
-- Keep professional UX explanations and practical instructions in natural, complete English first.
-- Follow key ideas with concise, accurate Chinese understanding support. Do not mechanically translate every sentence or let Chinese sections become longer than the English.
+- English Primary with Chinese Learning Support, approximately 60% English and 40% concise Chinese support. English remains the main learning and portfolio language.
+- Write each important idea or instruction in natural, complete English first, then add one short, accurate Chinese support line using **中文理解：** or **中文辅助理解：**. Chinese should clarify the UX meaning or the action to take, not translate every sentence.
+- Introduce important UX terms bilingually on first use, for example **Mental Model 心智模型** or **Pain Point 用户痛点**.
+- Keep Chinese support concise and useful to an intermediate English learner; avoid long Chinese-only blocks and avoid replacing the English.
 - Use professional, internationally natural UX English suitable for UX and interaction design work.
 - Make examples specific to the Project topic. Do not invent user research results or claim that real users were interviewed or tested.
 
@@ -169,12 +170,12 @@ Use these five second-level sections exactly and in this order:
 {chr(10).join(REQUIRED_HEADINGS)}
 
 Section requirements:
-1. Learn: teach the core UX idea, why it matters, and one practical principle. English first, then concise Chinese support.
+1. Learn: explain the core UX idea, why it matters, and one practical principle in complete English. After each major concept or dense explanation, add a concise **中文理解：** line that explains the meaning in natural Chinese. Pair important UX terms with Chinese on first use.
 2. English: include exactly five relevant UX or topic-specific English terms. Use numbered level-three headings. For each term include these exact labels:
    {", ".join(VOCAB_FIELDS)}
    Examples must be realistic UX-context sentences, followed by concise Chinese understanding. Add one or two useful professional UX expressions with short Chinese notes.
-3. Challenge: state a clear learning goal, today's task, and observable completion criteria. Keep the full task in English, followed by concise Chinese support.
-4. Practice: give numbered steps suitable for a beginner. Total estimated time must be 30–60 minutes. Specify a concrete deliverable with content outline. Do not ask the learner to create another lesson file.
+3. Challenge: state a clear learning goal, today's task, and observable completion criteria. Preserve the complete English requirements. Add concise Chinese support immediately after the Goal and Task, and a short Chinese support line for each completion criterion so the learner can act without translating the instructions themselves.
+4. Practice: provide beginner-friendly numbered steps with an estimated total time of 30–60 minutes. Every numbered step must first explain the action in English and then include one concise **中文辅助：** line clarifying exactly what the learner should do at that stage. Add concise Chinese support for any essential Tip, Formula, or example that could otherwise block understanding. Specify a concrete deliverable and retain its full English content outline; after the outline, add a concise Chinese explanation of what each field asks the learner to produce. Do not ask the learner to create another lesson file.
 5. Review: provide a short self-checklist and one reflection question in English, with concise Chinese support.
 Use Markdown only, preserve the section order, and do not add any other level-two sections.
 """

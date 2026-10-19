@@ -336,3 +336,35 @@
     text-size-adjust:87.5%;
   }
 }
+
+
+/* Dark Learn card: Markdown emphasis should keep the card's high-contrast text color. */
+.concept-feature .markdown-content,
+.concept-feature .markdown-content p,
+.concept-feature .markdown-content li{
+  color:#e2eee6;
+}
+.concept-feature .markdown-content strong,
+.concept-feature .markdown-content em{
+  color:inherit;
+}
+.concept-feature .markdown-content strong{font-weight:700}
+.concept-feature .markdown-content em{font-style:italic}
+.concept-feature .markdown-content h1,
+.concept-feature .markdown-content h2,
+.concept-feature .markdown-content h3,
+.concept-feature .markdown-content h4{color:#f7fbf8}
+.concept-feature .markdown-content blockquote{
+  color:#e2eee6;
+  background:#263a2e;
+  border-left-color:#9bd2ac;
+}
+.concept-feature .markdown-content code{
+  color:#f3fbf5;
+  background:#30483a;
+}
+.concept-feature .markdown-content a{color:#b9efcf}
+.concept-feature .markdown-content mark{
+  color:#f7fbf8;
+  background:#45634f;
+}

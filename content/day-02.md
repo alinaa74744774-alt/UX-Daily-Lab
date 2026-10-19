@@ -3,21 +3,15 @@
 ## 01 Learn｜今日学习
 
 ### What is a User Persona?
-A **User Persona** is a semi-fictional archetype that represents a key segment of your target audience. Rather than describing an actual living person, a persona synthesizes shared behaviors, motivations, goals, and pain points discovered across your user group. 
+A **User Persona 用户画像** is a semi-fictional archetype that represents a key segment of your target audience. Rather than describing an actual living person, a persona synthesizes shared behaviors, motivations, goals, and pain points discovered across your user group.
+**中文理解：** 用户画像不是某个真实个人的传记，而是从一类用户的共同目标、行为和困扰中提炼出的代表性模型。
 
-In product teams, personas prevent the dangerous trap of **"self-referential design"**—designing for yourself rather than the real user. They also eliminate the **"elastic user"**, where team members constantly stretch the definition of the user to justify whatever feature they personally prefer. A well-crafted persona serves as a shared reference point, helping designers, developers, and product managers align on who they are solving problems for.
+In product teams, personas prevent the dangerous trap of **"self-referential design 自我参照设计"**—designing for yourself rather than the real user. They also counter the **"elastic user 弹性用户"** problem, where teams keep redefining the user to justify preferred features. A well-crafted persona gives designers, developers, and product managers a shared reference for deciding whose problems the product should solve.
+**中文理解：** 它能帮助团队避免“把自己当用户”，也避免为了支持不同想法而反复改变用户定义；团队可据此聚焦真正服务对象。
 
 > **Core Principle: Focus on Behaviors and Goals, Not Demographic Fluff.**
-> Beginners often spend too much time inventing arbitrary details (e.g., marital status, favorite clothing brand, stock photo appearance). Effective UX personas prioritize **what users are trying to achieve**, **what blocks them**, and **how they make decisions** within your product domain.
-
----
-
-### 中文辅助理解
-**用户画像（User Persona）** 并非凭空编造的具体个人，而是基于用户群体的共同行为、动机、目标与痛点提炼出的“代表性角色模型”。
-
-在实际团队协作中，用户画像的核心价值是打破“自我参照设计”（即误以为用户和自己一样）以及“弹性用户”现象（团队成员为推销自己的想法，随时改变对用户特征的假设）。
-
-**核心实践原则：聚焦行为模式与目标，切忌堆砌无关的人口统计学信息。** 真正有用的画像关注用户在特定场景下“想达成什么目标”、“遇到了什么阻碍”以及“如何做决定”，而不是无意义的年龄、星座或虚构外貌。
+> Effective personas prioritize **what users are trying to achieve**, **what blocks them**, and **how they make decisions** in context—not invented details such as favorite brands or appearance.
+**中文理解：** 画像应说明用户要完成什么、受什么阻碍、如何决策；年龄、外貌等背景只有在影响体验时才值得保留。
 
 ---
 
@@ -66,49 +60,57 @@ In product teams, personas prevent the dangerous trap of **"self-referential des
 ## 03 Challenge｜今日挑战
 
 ### Learning Goal
-Understand the anatomy of an actionable persona and draft a structured **Proto-Persona** for a digital product scenario without relying on demographic filler.
+Understand the anatomy of an actionable persona and draft a structured **Proto-Persona 原型用户画像** for a digital product scenario without relying on demographic filler.
+**中文辅助理解：** 学会组织一份能指导设计的画像，并避免用无关背景信息填充内容。
 
 ### Today's Task
 Select a common digital scenario: **"A first-time apartment renter looking for roommates."**  
 Write a clean, 1-page persona profile in English containing realistic context, explicit goals, clear pain points, and concrete product takeaways.
+**中文辅助理解：** 以“首次租房、正在寻找室友的人”为场景，用英文完成一页画像；写清现实处境、目标、痛点和可落地的设计启示。
 
 ### Observable Completion Criteria
 1. **Clear Archetype Name & Role:** Defines the user's current situation and context concisely (e.g., "Relocating Junior Professional").
+   - 中文理解：用简洁名称和角色说明用户当前处境与使用场景。
 2. **Behavioral Tendencies:** Lists at least 2 distinct behavioral habits related to communication or decision-making.
+   - 中文理解：写出至少两项与沟通或决策有关的具体行为习惯。
 3. **Core Goals & Frustrations:** Lists at least 2 actionable goals and 2 explicit pain points.
+   - 中文理解：列出至少两个可行动的用户目标和两个明确痛点。
 4. **UX Implications:** States at least 2 direct design suggestions (e.g., "Must provide a verified ID badge to alleviate trust issues").
-
----
-
-### 中文辅助理解
-**挑战目标：** 掌握实用型用户画像的骨架结构，为典型数字化场景构筑一个不带无用信息的“原型画像（Proto-Persona）”。  
-**任务说明：** 选择场景“首次租房找室友的年轻人”，用英文梳理一份精炼的单页用户画像卡片。  
-**完成标准：** 包含明确的原型定位、2项行为习惯、2个核心目标与痛点，以及至少2条能直接指导界面或功能设计的落地建议。
+   - 中文理解：至少提出两条能回应痛点的界面或产品设计建议。
 
 ---
 
 ## 04 Practice｜实践
 
 **Estimated Time:** 40 minutes (30–60 minutes)
+**中文辅助：** 建议用 40 分钟完成；可按自己的节奏在 30–60 分钟内调整。
 
 Follow these numbered steps to create your persona artifact:
+**中文辅助：** 按以下步骤逐步完成画像作品。
 
 ### Step 1: Define the Scenario & Role (8 mins)
 Give your persona an archetype label and context line. Avoid fictional storytelling (e.g., "likes long walks on the beach"); define their functional reality.
+**中文辅助：** 为画像命名，并用一句话交代用户所处的情境；写真实需求，避免编造与体验无关的故事。
 - *Example Label:* "The Cautious Budgeter: Young professional moving to a new city for work."
 
 ### Step 2: Map Goals and Motivations (10 mins)
 Identify what success looks like from the user's perspective.
+**中文辅助：** 描述用户眼中的“成功结果”，而不是先写产品功能。
 - *Tip:* Ask: "What job is this user hiring our app to do?"
 - Formulate 2–3 actionable statements (e.g., "Find a roommate with compatible sleep schedules within 3 weeks").
+**中文辅助：** 写 2–3 条可观察、可行动的目标，例如在三周内找到作息相近的室友。
 
 ### Step 3: Identify Friction and Pain Points (10 mins)
 List the specific obstacles, fears, or manual burdens they encounter.
+**中文辅助：** 找出用户在过程中遇到的具体阻碍、担忧或繁琐操作。
 - Focus on emotional and functional barriers (e.g., "Fear of scams or unvetted strangers," "Fatigue from endless messaging without responses").
+**中文辅助：** 同时考虑情绪和实际操作层面的阻碍，例如担心诈骗，或因消息石沉大海而疲惫。
 
 ### Step 4: Translate into UX Implications (12 mins)
 Connect user needs directly to design requirements. For every pain point, propose a concrete product response.
+**中文辅助：** 把用户需求转化成设计要求；每个重要痛点都要对应一个具体产品回应。
 - *Formula:* "Because [Persona] struggles with [Pain Point], the UI must [Specific Feature/Design Choice]."
+**中文辅助：** 可套用表达：“由于该画像在［痛点］上遇到困难，界面需要［具体功能或设计选择］。”
 
 ---
 
@@ -133,6 +135,13 @@ Connect user needs directly to design requirements. For every pain point, propos
 - [Feature / UI suggestion solving Pain Point 1]
 - [Feature / UI suggestion solving Pain Point 2]
 ```
+
+**中文辅助理解：**
+- Context & Scenario：用 1–2 句话交代用户所处环境及当前任务。
+- Behaviors & Mental Model：写用户反复出现的行为，以及他们认为产品如何运作。
+- Core Goals：描述用户希望达成的结果。
+- Key Pain Points：列出妨碍目标实现的具体困难。
+- Design Takeaways：将发现转化为可执行的界面或功能建议。
 
 ---
 
