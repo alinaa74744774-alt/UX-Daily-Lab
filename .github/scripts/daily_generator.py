@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 import copy
+import errno
 import json
 import math
 import os
 import random
 import re
+import socket
 import sys
 import time
 import urllib.error
@@ -204,15 +206,79 @@ def retry_after_seconds(error: urllib.error.HTTPError) -> int | None:
         return None
 
 
-def retry_delay(error: urllib.error.HTTPError, retry_number: int) -> int:
+def retry_delay(
+    error: urllib.error.HTTPError | None,
+    retry_number: int,
+) -> int:
     """Prefer Google's Retry-After; otherwise use capped exponential backoff."""
-    server_delay = retry_after_seconds(error)
+    server_delay = retry_after_seconds(error) if error is not None else None
     if server_delay is not None:
         return server_delay
 
     backoff = min(BASE_RETRY_SECONDS * (2 ** (retry_number - 1)), MAX_RETRY_SECONDS)
     jitter = random.uniform(0, min(5, backoff * 0.1))
     return math.ceil(backoff + jitter)
+
+
+def temporary_network_reason(error: BaseException) -> str | None:
+    """Classify timeout and transient URL/network failures without exposing details."""
+    if isinstance(error, (TimeoutError, socket.timeout)):
+        return "timeout"
+
+    if not isinstance(error, urllib.error.URLError):
+        return None
+
+    reason = error.reason
+    if isinstance(reason, (TimeoutError, socket.timeout)):
+        return "timeout"
+
+    if isinstance(reason, socket.gaierror) and reason.errno == socket.EAI_AGAIN:
+        return "temporary network failure"
+
+    temporary_errnos = {
+        errno.EAGAIN,
+        errno.ECONNABORTED,
+        errno.ECONNREFUSED,
+        errno.ECONNRESET,
+        errno.EHOSTUNREACH,
+        errno.ENETUNREACH,
+        errno.ETIMEDOUT,
+    }
+    if hasattr(errno, "EWOULDBLOCK"):
+        temporary_errnos.add(errno.EWOULDBLOCK)
+    if isinstance(reason, OSError) and reason.errno in temporary_errnos:
+        return "temporary network failure"
+
+    if isinstance(reason, str):
+        normalized = reason.lower()
+        if "timed out" in normalized or "timeout" in normalized:
+            return "timeout"
+        if any(
+            phrase in normalized
+            for phrase in (
+                "temporary failure",
+                "temporarily unavailable",
+                "try again",
+            )
+        ):
+            return "temporary network failure"
+    return None
+
+
+def retry_temporary_network_error(reason: str, retry_number: int) -> None:
+    if retry_number > MAX_RETRIES:
+        raise GeneratorError(
+            f"Gemini temporary network error: {reason}; retries exhausted."
+        ) from None
+
+    delay = retry_delay(None, retry_number)
+    print(
+        f"Gemini temporary network error: {reason}\n"
+        f"Retry attempt {retry_number}/{MAX_RETRIES}\n"
+        f"Waiting {delay} seconds",
+        flush=True,
+    )
+    time.sleep(delay)
 
 
 def request_gemini(api_key: str, prompt: str) -> str:
@@ -260,10 +326,15 @@ def request_gemini(api_key: str, prompt: str) -> str:
                 flush=True,
             )
             time.sleep(delay)
-        except urllib.error.URLError:
-            raise GeneratorError(
-                "Gemini connection failed; request details were withheld."
-            ) from None
+        except (TimeoutError, socket.timeout):
+            retry_temporary_network_error("timeout", request_number)
+        except urllib.error.URLError as error:
+            reason = temporary_network_reason(error)
+            if reason is None:
+                raise GeneratorError(
+                    "Gemini connection failed; request details were withheld."
+                ) from None
+            retry_temporary_network_error(reason, request_number)
 
     try:
         text = "".join(
