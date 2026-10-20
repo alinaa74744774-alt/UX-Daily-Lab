@@ -33,10 +33,18 @@
         {
           "week": 1,
           "day": 3,
-          "topic": "Information Architecture",
+          "topic": "信息架构 Information Architecture",
           "title": "Day 03｜信息架构 Information Architecture",
-          "content_path": null,
-          "status": "upcoming"
+          "content_path": "content/day-03.md",
+          "status": "available",
+          "day_in_week": 3,
+          "scheduled_date": "2026-10-20",
+          "generation_status": "generated",
+          "project_item_id": "PVTI_lAHODo1LvM4BnefgzhBc_1A",
+          "issue_number": 3,
+          "content_type": "Issue",
+          "project_status": "Todo",
+          "source_type": "github_project"
         },
         {
           "week": 1,
