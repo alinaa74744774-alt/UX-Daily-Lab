@@ -50,35 +50,26 @@ In product teams, personas prevent the dangerous trap of **"self-referential des
 ---
 
 ### Professional UX Expressions｜常用专业表达
-- **"Design for the primary, accommodate the secondary."**  
-  *针对主画像设计核心流程，同时兼顾次要画像的需求（避免做出四不像的设计）。*
-- **"Actionable insights over demographic noise."**  
-  *重视能指导具体设计决策的见解，过滤掉无关紧要的人口统计学杂音。*
+- **"Design for the primary, accommodate the secondary."** — Center core decisions on the primary persona while accounting for secondary needs.
+- **"Actionable insights over demographic noise."** — Prioritize findings that guide design decisions over irrelevant profile details.
 
 ---
 
-## 03 Challenge｜今日挑战
+## 03 Challenge
 
-### Learning Goal
-Understand the anatomy of an actionable persona and draft a structured **Proto-Persona 原型用户画像** for a digital product scenario without relying on demographic filler.
-**中文辅助理解：** 学会组织一份能指导设计的画像，并避免用无关背景信息填充内容。
+### Scenario
+A first-time apartment renter is looking for a compatible roommate.
 
-### Today's Task
-Select a common digital scenario: **"A first-time apartment renter looking for roommates."**  
-Write a clean, 1-page persona profile in English containing realistic context, explicit goals, clear pain points, and concrete product takeaways.
-**中文辅助理解：** 以“首次租房、正在寻找室友的人”为场景，用英文完成一页画像；写清现实处境、目标、痛点和可落地的设计启示。
+### Goal
+Create a useful proto-persona that helps a product team understand this user's needs and make better design decisions.
 
-### Observable Completion Criteria
-1. **Clear Archetype Name & Role:** Defines the user's current situation and context concisely (e.g., "Relocating Junior Professional").
-   - 中文理解：用简洁名称和角色说明用户当前处境与使用场景。
-2. **Behavioral Tendencies:** Lists at least 2 distinct behavioral habits related to communication or decision-making.
-   - 中文理解：写出至少两项与沟通或决策有关的具体行为习惯。
-3. **Core Goals & Frustrations:** Lists at least 2 actionable goals and 2 explicit pain points.
-   - 中文理解：列出至少两个可行动的用户目标和两个明确痛点。
-4. **UX Implications:** States at least 2 direct design suggestions (e.g., "Must provide a verified ID badge to alleviate trust issues").
-   - 中文理解：至少提出两条能回应痛点的界面或产品设计建议。
+### Deliverable
+A one-page English proto-persona using the outline in Practice.
 
----
+### Completion Criteria
+1. Define the user's current situation and context in a concise archetype.
+2. Include at least two behavior patterns, two goals, and two pain points.
+3. Connect each major pain point to a concrete product or interface response.
 
 ## 04 Practice｜实践
 

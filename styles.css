@@ -368,3 +368,28 @@
   color:#f7fbf8;
   background:#45634f;
 }
+
+
+/* Keep Markdown deliverable templates readable without changing the course card layout. */
+.markdown-content pre.markdown-code{
+  overflow-x:auto;
+  margin:10px 0;
+  padding:12px;
+  border-radius:9px;
+  background:#f0f4f1;
+  color:#34463a;
+  font-size:10px;
+  line-height:1.55;
+  white-space:pre;
+}
+.markdown-content pre.markdown-code code{
+  display:block;
+  padding:0;
+  background:transparent;
+  color:inherit;
+  font-size:inherit;
+}
+.concept-feature .markdown-content pre.markdown-code{
+  background:#30483a;
+  color:#f3fbf5;
+}

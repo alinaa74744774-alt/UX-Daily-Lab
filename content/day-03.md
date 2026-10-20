@@ -59,23 +59,21 @@ A reliable IA relies on two fundamental principles: **Visual & Content Hierarchy
 
 ---
 
-## 03 Challenge｜今日挑战
+## 03 Challenge
 
-**Goal:** Understand how to group features logically and define an unambiguous navigation structure for a digital product.  
-**中文辅助：** 目标：掌握如何将功能内容进行逻辑归类，并为一个数字产品定义清晰的导航层级。
+### Scenario
+A meal-planning app has a set of useful features, but their current organization is unclear.
 
-**Task:** Design a simple 2-level Information Architecture Site Map for a lightweight **Recipe & Meal Planner App (食谱与膳食规划应用)**. Organize a provided set of features into mutually exclusive categories with user-friendly labels.  
-**中文辅助：** 任务：为一款轻量级“食谱与膳食规划 App”梳理一份包含 2 个层级的信息架构站点地图（Site Map），将常用功能分类归纳，并赋予清晰的标签。
+### Goal
+Create a two-level information architecture that helps everyday cooks find the right feature quickly.
 
-### Observable Completion Criteria:
-1. Select and organize 8–10 distinct features into 3 to 4 clear primary navigation buckets (Level 1).  
-   *将 8-10 个功能特性归纳到 3 到 4 个清晰的一级导航模块中。*
-2. Ensure each category label is mutually exclusive and uses clear, descriptive English.  
-   *确保每个分类标签语义互斥且通俗清晰，避免让用户产生混淆。*
-3. Provide a brief design rationale explaining why these categories align with user expectations.  
-   *附上简短的架构理由，阐述该分类方式为何契合用户的使用习惯。*
+### Deliverable
+A concise English sitemap with three or four primary categories and a short design rationale.
 
----
+### Completion Criteria
+1. Place the provided features into three or four primary navigation categories.
+2. Use distinct labels that are familiar and easy to understand.
+3. Explain how the structure supports user expectations and reduces unnecessary effort.
 
 ## 04 Practice｜实践
 
