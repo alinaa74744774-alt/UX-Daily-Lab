@@ -49,10 +49,18 @@
         {
           "week": 1,
           "day": 4,
-          "topic": "User Flow",
+          "topic": "用户流程 User Flow",
           "title": "Day 04｜用户流程 User Flow",
-          "content_path": null,
-          "status": "upcoming"
+          "content_path": "content/day-04.md",
+          "status": "available",
+          "day_in_week": 4,
+          "scheduled_date": "2026-10-21",
+          "generation_status": "generated",
+          "project_item_id": "PVTI_lAHODo1LvM4BnefgzhBc__Y",
+          "issue_number": 4,
+          "content_type": "Issue",
+          "project_status": "Todo",
+          "source_type": "github_project"
         },
         {
           "week": 1,
