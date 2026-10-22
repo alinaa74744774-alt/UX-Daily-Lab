@@ -65,10 +65,18 @@
         {
           "week": 1,
           "day": 5,
-          "topic": "UI Design",
+          "topic": "界面设计 UI Design",
           "title": "Day 05｜界面设计 UI Design",
-          "content_path": null,
-          "status": "upcoming"
+          "content_path": "content/day-05.md",
+          "status": "available",
+          "day_in_week": 5,
+          "scheduled_date": "2026-10-22",
+          "generation_status": "generated",
+          "project_item_id": "PVTI_lAHODo1LvM4BnefgzhBdAFA",
+          "issue_number": 5,
+          "content_type": "Issue",
+          "project_status": "Todo",
+          "source_type": "github_project"
         },
         {
           "week": 1,
