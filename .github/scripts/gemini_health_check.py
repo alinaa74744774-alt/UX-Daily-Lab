@@ -33,7 +33,7 @@ def error_category(status: int) -> str:
 def main() -> int:
     model = os.environ.get("GEMINI_MODEL", DEFAULT_MODEL).strip()
     if model not in ALLOWED_MODELS:
-        print(f"Model: {model or 'not_selected'}")
+        print("Model: unsupported")
         print("HTTP status: not_sent")
         print("Elapsed: 0.000 seconds")
         print("Error type: invalid_model_selection")
