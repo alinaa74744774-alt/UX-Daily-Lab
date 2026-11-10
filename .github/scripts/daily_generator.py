@@ -44,9 +44,11 @@ VOCAB_FIELDS = (
 VOCAB_ENTRY_RE = re.compile(r"^###\s+\d+\.\s+.+$", flags=re.MULTILINE)
 
 RETRYABLE_HTTP_STATUSES = frozenset({429, 500, 502, 503, 504})
-MAX_RETRIES = 4  # Five total requests: initial request plus four retries.
-BASE_RETRY_SECONDS = 30
-MAX_RETRY_SECONDS = 240
+MAX_RETRIES = 2  # Three total attempts per course.
+BASE_RETRY_SECONDS = 15
+MAX_RETRY_SECONDS = 30
+API_REQUEST_TIMEOUT_SECONDS = 45
+COURSE_RETRY_BUDGET_SECONDS = 180
 
 
 class GeneratorError(RuntimeError):
@@ -289,7 +291,7 @@ def retry_temporary_network_error(reason: str, retry_number: int) -> None:
 def request_gemini(api_key: str, prompt: str) -> str:
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.6, "maxOutputTokens": 6000},
+        "generationConfig": {"maxOutputTokens": 6000},
     }
     request = urllib.request.Request(
         GEMINI_API,
@@ -302,9 +304,15 @@ def request_gemini(api_key: str, prompt: str) -> str:
     )
 
     result = None
+    deadline = time.monotonic() + COURSE_RETRY_BUDGET_SECONDS
     for request_number in range(1, MAX_RETRIES + 2):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise GeneratorError("Gemini retry time budget exhausted; course remains missing.")
         try:
-            with urllib.request.urlopen(request, timeout=60) as response:
+            with urllib.request.urlopen(
+                request, timeout=min(API_REQUEST_TIMEOUT_SECONDS, max(1, remaining))
+            ) as response:
                 result = json.loads(response.read().decode("utf-8"))
             break
         except urllib.error.HTTPError as error:
@@ -324,6 +332,9 @@ def request_gemini(api_key: str, prompt: str) -> str:
 
             delay = retry_delay(error, request_number)
             error.close()
+            remaining = deadline - time.monotonic()
+            if remaining <= 0 or delay >= remaining:
+                raise GeneratorError("Gemini retry time budget exhausted; course remains missing.") from None
             print(
                 f"Gemini temporary error; HTTP status {status}; "
                 f"Retry attempt {request_number}/{MAX_RETRIES}; "
@@ -332,6 +343,10 @@ def request_gemini(api_key: str, prompt: str) -> str:
             )
             time.sleep(delay)
         except (TimeoutError, socket.timeout):
+            remaining = deadline - time.monotonic()
+            delay = retry_delay(None, request_number)
+            if request_number > MAX_RETRIES or remaining <= 0 or delay >= remaining:
+                raise GeneratorError("Gemini retry time budget exhausted after timeout; course remains missing.") from None
             retry_temporary_network_error("timeout", request_number)
         except urllib.error.URLError as error:
             reason = temporary_network_reason(error)
@@ -339,6 +354,10 @@ def request_gemini(api_key: str, prompt: str) -> str:
                 raise GeneratorError(
                     "Gemini connection failed; request details were withheld."
                 ) from None
+            remaining = deadline - time.monotonic()
+            delay = retry_delay(None, request_number)
+            if request_number > MAX_RETRIES or remaining <= 0 or delay >= remaining:
+                raise GeneratorError("Gemini retry time budget exhausted after network error; course remains missing.") from None
             retry_temporary_network_error(reason, request_number)
 
     try:
