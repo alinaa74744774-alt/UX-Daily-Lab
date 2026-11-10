@@ -150,8 +150,7 @@ class DailyGeneratorBackfillTests(unittest.TestCase):
         response.__enter__.return_value.read.return_value = json.dumps({
             "candidates": [{"content": {"parts": [{"text": "course"}]}}]
         }).encode()
-        with mock.patch.dict(os.environ, {"GEMINI_MODEL": ""}), \\
-             mock.patch.object(self.mod.urllib.request, "urlopen", return_value=response) as urlopen:
+        with mock.patch.dict(os.environ, {"GEMINI_MODEL": ""}), mock.patch.object(self.mod.urllib.request, "urlopen", return_value=response) as urlopen:
             self.mod.request_gemini("mock-key", "prompt")
         request = urlopen.call_args.args[0]
         payload = json.loads(request.data.decode())
@@ -173,8 +172,7 @@ class DailyGeneratorBackfillTests(unittest.TestCase):
             )
 
     def test_unapproved_model_fails_before_network_request(self):
-        with mock.patch.dict(os.environ, {"GEMINI_MODEL": "unapproved-model"}), \\
-             mock.patch.object(self.mod.urllib.request, "urlopen") as urlopen:
+        with mock.patch.dict(os.environ, {"GEMINI_MODEL": "unapproved-model"}), mock.patch.object(self.mod.urllib.request, "urlopen") as urlopen:
             with self.assertRaisesRegex(self.mod.GeneratorError, "unsupported"):
                 self.mod.request_gemini("mock-key", "prompt")
         urlopen.assert_not_called()
