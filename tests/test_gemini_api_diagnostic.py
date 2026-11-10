@@ -1,6 +1,7 @@
 import importlib.util
 import io
 import json
+import sys
 from contextlib import redirect_stdout
 from pathlib import Path
 from unittest import TestCase, main
@@ -10,6 +11,7 @@ import urllib.error
 SCRIPT = Path(__file__).resolve().parents[1] / ".github" / "scripts" / "gemini_api_diagnostic.py"
 SPEC = importlib.util.spec_from_file_location("gemini_api_diagnostic", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MODULE
 SPEC.loader.exec_module(MODULE)
 
 
