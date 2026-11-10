@@ -83,16 +83,34 @@
           "day": 6,
           "topic": "Interactive Prototype",
           "title": "Day 06｜交互原型 Interactive Prototype",
-          "content_path": null,
-          "status": "upcoming"
+          "content_path": "content/day-06.md",
+          "status": "available",
+          "day_in_week": 6,
+          "scheduled_date": "2026-10-23",
+          "generation_status": "manually_authored",
+          "generation_method": "assistant_authored_no_gemini",
+          "project_item_id": "PVTI_lAHODo1LvM4BnefgzhBdAQQ",
+          "issue_number": 6,
+          "content_type": "Issue",
+          "project_status": "Todo",
+          "source_type": "github_project"
         },
         {
           "week": 1,
           "day": 7,
           "topic": "Weekly Review",
           "title": "Day 07｜每周复盘 Weekly Review",
-          "content_path": null,
-          "status": "upcoming"
+          "content_path": "content/day-07.md",
+          "status": "available",
+          "day_in_week": 7,
+          "scheduled_date": "2026-10-24",
+          "generation_status": "manually_authored",
+          "generation_method": "assistant_authored_no_gemini",
+          "project_item_id": "PVTI_lAHODo1LvM4BnefgzhBdAXE",
+          "issue_number": 7,
+          "content_type": "Issue",
+          "project_status": "Todo",
+          "source_type": "github_project"
         }
       ]
     }
