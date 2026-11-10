@@ -2,6 +2,16 @@ name: Daily Course Generator
 
 on:
   workflow_dispatch:
+    inputs:
+      target_date:
+        description: "Optional planned date to generate (YYYY-MM-DD)"
+        required: false
+        type: string
+      backfill_missing:
+        description: "Generate overdue missing courses first"
+        required: false
+        default: true
+        type: boolean
   schedule:
     # 23:00 UTC on the previous calendar day is 07:00 the next day in Asia/Shanghai (UTC+8).
     # This cron only starts the workflow; Project scheduled_date determines the day's course.
@@ -17,23 +27,29 @@ concurrency:
 jobs:
   generate-todays-course:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Sync current Project plan
+        id: sync
         env:
           PROJECTS_READ_TOKEN: ${{ secrets.PROJECTS_READ_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: python .github/scripts/project_sync.py --output config/learning-plan.json
 
-      - name: Generate today's course when needed
+      - name: Generate due courses and backfill missing lessons
+        id: generate
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TARGET_DATE: ${{ github.event.inputs.target_date }}
+          BACKFILL_MISSING: ${{ github.event.inputs.backfill_missing }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python .github/scripts/daily_generator.py
 
       - name: Commit generated files when changed
+        if: always() && steps.sync.outcome == 'success'
         run: |
           set -euo pipefail
           git add -A -- config/learning-plan.json content/manifest.json
@@ -46,3 +62,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Generate today's UX learning course"
           git push
+
+      - name: Report generation failure after preserving successful courses
+        if: always() && steps.generate.outcome == 'failure'
+        run: |
+          echo "At least one planned course remains missing; successful earlier courses were committed when present."
+          exit 1

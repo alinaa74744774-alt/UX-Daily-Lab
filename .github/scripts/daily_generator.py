@@ -486,39 +486,97 @@ def generate_item(item: dict, manifest: dict) -> tuple[dict, bool]:
     return updated_manifest, True
 
 
-def main() -> int:
-    plan = load_json(PLAN_PATH, "Project Sync plan cache")
-    items = all_plan_items(plan)
-    today = current_date(plan.get("timezone", "Asia/Shanghai"))
-    todays_items = find_today_items(plan, today)
-    if not todays_items:
-        print(f"No scheduled learning item for today ({today}).")
-        return 0
+def select_due_items(
+    plan: dict,
+    manifest: dict,
+    today: str,
+    target_date: str | None = None,
+    backfill_missing: bool = True,
+    limit: int = 2,
+) -> list[dict]:
+    """Select planned, due courses in date order without replacing existing content."""
+    if target_date:
+        try:
+            datetime.strptime(target_date, "%Y-%m-%d")
+        except ValueError:
+            raise GeneratorError("target_date must use YYYY-MM-DD.") from None
+        candidates = [item for item in all_plan_items(plan) if item.get("scheduled_date") == target_date]
+    else:
+        candidates = [
+            item for item in all_plan_items(plan)
+            if item.get("scheduled_date")
+            and item.get("scheduled_date") <= today
+            and (backfill_missing or item.get("scheduled_date") == today)
+        ]
 
     seen_days: set[int] = set()
-    for item in todays_items:
+    pending = []
+    for item in candidates:
         day = item.get("day")
-        if day is None:
-            raise GeneratorError(
-                f"Today's scheduled Project Item has an unrecognized Day title: {item.get('title', '(untitled)')}"
-            )
+        if not isinstance(day, int):
+            raise GeneratorError(f"Scheduled Project Item has an unrecognized Day title: {item.get('title', '(untitled)')}")
         if day in seen_days:
             raise GeneratorError(f"Multiple Project Items are scheduled for Day {day:02d}; refusing to guess.")
         seen_days.add(day)
+        if item.get("generation_blocked"):
+            print(f"Skipped blocked Project Item: {item.get('title', '(untitled)')}")
+            continue
+        target = target_path_for(item)
+        if existing_course_path(item, target, manifest):
+            continue
+        pending.append(item)
 
+    pending.sort(key=lambda item: (item["scheduled_date"], item["day"]))
+    if target_date and not pending and not candidates:
+        print(f"No Project Item scheduled for target_date {target_date}.")
+    return pending[:max(1, min(int(limit), 2))]
+
+
+def process_items(items: list[dict], manifest: dict, generator=None) -> tuple[dict, int, int, list[str]]:
+    """Keep each success durable even if a later item fails."""
+    generate = generator or generate_item
+    generated = skipped = 0
+    errors = []
+    for item in items:
+        try:
+            manifest, did_generate = generate(item, manifest)
+            generated += int(did_generate)
+            skipped += int(not did_generate)
+        except Exception as error:
+            errors.append(f"Day {item.get('day', '?')}: {error}")
+            print(f"Generation failed for Day {item.get('day', '?')}; it remains eligible for a later run.")
+    return manifest, generated, skipped, errors
+
+
+def main() -> int:
+    plan = load_json(PLAN_PATH, "Project Sync plan cache")
+    today = current_date(plan.get("timezone", "Asia/Shanghai"))
     manifest = load_json(MANIFEST_PATH, "course manifest")
-    generated = 0
-    skipped = 0
-    for item in sorted(todays_items, key=lambda value: value["day"]):
-        manifest, did_generate = generate_item(item, manifest)
-        generated += int(did_generate)
-        skipped += int(not did_generate)
+    target_date = os.environ.get("TARGET_DATE", "").strip() or None
+    manual_backfill = os.environ.get("BACKFILL_MISSING", "").strip().lower() in {"true", "1", "yes"}
+    is_schedule = os.environ.get("GITHUB_EVENT_NAME") == "schedule"
+    backfill = is_schedule or manual_backfill or not target_date
+    items = select_due_items(
+        plan,
+        manifest,
+        today,
+        target_date=target_date,
+        backfill_missing=backfill,
+        limit=2,
+    )
+    if not items:
+        print(f"No missing scheduled learning item due for processing ({today}).")
+        return 0
 
+    manifest, generated, skipped, errors = process_items(items, manifest)
     print(
-        f"Daily Generator complete for {today}: "
-        f"{generated} generated, {skipped} existing/skipped."
+        f"Course Generator complete: {generated} generated, {skipped} existing/skipped, "
+        f"{len(errors)} failed; maximum batch size is 2."
     )
     print(f"Gemini model: {MODEL}")
+    if errors:
+        print("One or more courses remain missing and will be retried on a future run.", file=sys.stderr)
+        return 1
     return 0
 
 
