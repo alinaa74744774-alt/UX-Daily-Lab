@@ -2,6 +2,15 @@ name: Gemini API Health Check
 
 on:
   workflow_dispatch:
+    inputs:
+      model:
+        description: "Gemini model to check (one request, no retries)"
+        required: true
+        type: choice
+        default: gemini-3.8-flash
+        options:
+          - gemini-3.8-flash
+          - gemini-3.1-flash-lite
 
 permissions:
   contents: read
@@ -17,4 +26,5 @@ jobs:
       - name: Send one minimal Gemini request
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ inputs.model }}
         run: python .github/scripts/gemini_health_check.py
