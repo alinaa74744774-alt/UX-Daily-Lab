@@ -22,10 +22,12 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[1]
-sys.path.insert(0, str(SCRIPT_DIR))
-
-# Reuse the already configured Gemini model and endpoint without changing them.
-from generate_day01 import GEMINI_API, MODEL  # noqa: E402
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
+SUPPORTED_MODELS = frozenset({
+    "gemini-3.1-flash-lite",
+    "gemini-3.8-flash",
+})
+GEMINI_MODEL_ENV = "GEMINI_MODEL"
 
 PLAN_PATH = REPO_ROOT / "config" / "learning-plan.json"
 MANIFEST_PATH = REPO_ROOT / "content" / "manifest.json"
@@ -53,6 +55,28 @@ COURSE_RETRY_BUDGET_SECONDS = 180
 
 class GeneratorError(RuntimeError):
     """Raised when a plan entry, API response, or file update is invalid."""
+
+
+def configured_model() -> str:
+    """Use the verified default unless an explicitly allowlisted override is set."""
+    requested = (os.environ.get(GEMINI_MODEL_ENV) or "").strip()
+    model = requested or DEFAULT_MODEL
+    if model not in SUPPORTED_MODELS:
+        raise GeneratorError(
+            "GEMINI_MODEL is unsupported; choose gemini-3.1-flash-lite "
+            "or gemini-3.8-flash."
+        )
+    return model
+
+
+def gemini_endpoint(model: str | None = None) -> str:
+    selected = model or configured_model()
+    if selected not in SUPPORTED_MODELS:
+        raise GeneratorError("Unsupported Gemini model selection.")
+    return (
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{selected}:generateContent"
+    )
 
 
 def load_json(path: Path, label: str) -> dict:
@@ -289,12 +313,13 @@ def retry_temporary_network_error(reason: str, retry_number: int) -> None:
 
 
 def request_gemini(api_key: str, prompt: str) -> str:
+    endpoint = gemini_endpoint()
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"maxOutputTokens": 6000},
     }
     request = urllib.request.Request(
-        GEMINI_API,
+        endpoint,
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
         method="POST",
         headers={
@@ -592,7 +617,7 @@ def main() -> int:
         f"Course Generator complete: {generated} generated, {skipped} existing/skipped, "
         f"{len(errors)} failed; maximum batch size is 2."
     )
-    print(f"Gemini model: {MODEL}")
+    print(f"Gemini model: {configured_model()}")
     if errors:
         print("One or more courses remain missing and will be retried on a future run.", file=sys.stderr)
         return 1

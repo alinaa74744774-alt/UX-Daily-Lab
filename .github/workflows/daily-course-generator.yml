@@ -43,6 +43,7 @@ jobs:
         id: generate
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           TARGET_DATE: ${{ github.event.inputs.target_date }}
           BACKFILL_MISSING: ${{ github.event.inputs.backfill_missing }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
